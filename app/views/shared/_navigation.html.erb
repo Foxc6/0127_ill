@@ -1,0 +1,17 @@
+<nav class="sidebar-nav">
+	<% if current_user %>
+	<ul>
+			<% if current_user.role.name == 'admin' || current_user.role.name == 'manager' then %>
+			<li <% if controller.controller_name == "sales" %>class="current"<% end %>><%= link_to 'Sales', sales_path %></li>
+			<% end %>
+		<li <% if controller.controller_name == "projects" %>class="current"<% end %>><%= link_to 'Projects', projects_path %></li>
+		<% if current_user %>
+			<% if current_user.role.name == 'admin' || current_user.role.name == 'manager' then %>
+			<li <% if controller.controller_name == "clients" %>class="current"<% end %>><%= link_to 'Clients', clients_path %></li>
+			<% end %>
+		<% end %>
+		<li <% if controller.controller_name == "contacts" %>class="current"<% end %>><%= link_to 'Contacts', contacts_path %></li>
+		<li <% if controller.controller_name == "compose" %>class="current"<% end %>><%= link_to 'Compose', compose_path %></li>
+	</ul>
+	<% end %>
+</nav>

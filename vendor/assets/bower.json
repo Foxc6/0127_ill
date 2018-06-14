@@ -1,0 +1,12 @@
+{
+  "name": "dsl-generated-dependencies",
+  "dependencies": {
+    "angular": "latest",
+    "angular-ui-router": "latest",
+    "angular-cookies": "latest",
+    "angular-resource": "latest",
+    "angular-sanitize": "latest",
+    "angular-translate": "latest",
+    "angular-translate-loader-static-files": "latest"
+  }
+}

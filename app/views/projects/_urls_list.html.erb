@@ -1,0 +1,20 @@
+<% if @project.urls.any? %>
+<table class="url">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @project.urls.each do |url| %>
+      <tr>
+        <td><%= url.name %></td>
+        <td><%= url.url %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p class="empty">No urls yet.</p>
+<% end %>

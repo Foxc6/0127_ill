@@ -1,0 +1,21 @@
+<div>
+  <h1>USER: </h1>
+  <%  %>
+  <% if @profile %>
+  <div>
+      <img src="<%= @profile_picture['all'][0] %>" alt="">
+  </div>
+  <h2><%= @profile.first_name %> <%= @profile.last_name %></h2>
+  <h4><%= @profile.headline %></h4>
+  <% end %>
+</div>
+
+<div>
+  <h1>USER CONNECTIONS: </h1>
+  <% %>
+  <form action="/auth/look_up" method="post" accept-charset="utf-8">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <input type="text" name="user_name" >
+    <input type="submit" name="">
+  </form>
+</div>

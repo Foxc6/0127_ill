@@ -1,0 +1,15 @@
+<% if @contact.social_reaches.any? %>
+  <% @contact.social_reaches.each do |social_reach| %>
+  <li class="social-item">
+    <a href="<%= social_reach.url %>" target="_blank">
+      <i class="fa fa-<%= social_reach.name.downcase %>"></i>
+      <div class="soc-info">
+        <span><%= social_reach.username %></span>
+        <span class="count"><%= raw(display_social_reach(social_reach)) %></span>
+      </div>
+    </a>
+  </li>
+  <% end %>
+<% else %>
+  <p class="empty">No social networks yet.</p>
+<% end %>

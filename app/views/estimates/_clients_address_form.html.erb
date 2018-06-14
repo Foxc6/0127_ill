@@ -1,0 +1,45 @@
+<div class="has-limit">
+	<div class="row">
+	<% if @client.present? %>
+		<%= nested_form_for(@client) do |f| %>
+			<% if @client.errors.any? %>
+				<div id="error_explanation">
+					<h2><%= pluralize(@client.errors.count, "error") %> prohibited this contact from being saved:</h2>
+					<ul>
+						<% @client.errors.full_messages.each do |message| %>
+							<li><%= message %></li>
+						<% end %>
+					</ul>
+				</div>
+			<% end %>
+
+			<div class="form-group edit-group addresses half">
+				<div class="bar-header">
+					<h4>Client Addresses</h4>
+				</div>
+				<%= f.fields_for :addresses do |address| %>
+					<%= address.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+					<%= address.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+					<br>
+					<%= address.text_field  :address1, :class =>'odd', :placeholder => 'Address 1'  %>
+					<%= address.text_field  :address2, :placeholder => 'Address 2'  %>
+					<%= address.text_field  :city, :class =>'odd', :placeholder => 'City'  %>
+
+					<% unless address.blank? %>
+						<% state = State.where(id: address.object.state_id).first %>
+						<% unless state.blank? %>
+							<%= address.select( "state_id", options_from_collection_for_select(@states, "id", "name", state.id), include_blank: true) %>
+						<% else %>
+							<%= address.select( "state_id", options_from_collection_for_select(@states, "id", "name"), include_blank: true) %>
+						<% end %>
+					<% end %>
+
+					<%= address.text_field  :postal_code, :class =>'odd', :placeholder => 'Postal Code'  %>
+					<%= address.hidden_field  :country_id, :value => @default_country  %>
+				<% end %>
+				<%= f.link_to_add " + Add Address", :addresses %>
+			</div>
+		<% end %>
+	<% end %>
+	</div>
+</div>

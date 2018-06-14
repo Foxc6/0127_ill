@@ -1,0 +1,42 @@
+<div class="sales-cases col-sm-12 col-md-6">
+  <div class="has-limit">
+    <div class="row">
+    Paid Total: <%= number_to_currency(@paid) %>
+    Owed Total: <%= number_to_currency(@owed) %>
+    </div>
+    <div class="row">
+      <div id="gantt" style='width:100%; height:500px;' class="sales-cases col-sm-12 col-md-6">
+      <h2>Payment</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    gantt.config.xml_date="%Y-%m-%d %H:%i";
+    gantt.config.columns = [
+      {name:"text", label:"Invoice",  width:"120", tree:true, align: "center"  }
+  ];
+    gantt.config.readonly = true
+    gantt.config.scale_unit = "year";
+    gantt.config.date_scale = "%y";
+    gantt.config.subscales = [
+      {unit:"month", step:1, date:"%M" }
+    ];
+    gantt.config.scale_height = 100;
+    gantt.templates.date_scale = null;
+    gantt.init("gantt");
+    gantt.load("<%= payments_path %>");
+    gantt.attachEvent("onTaskClick", function(id, e) {
+    var number = this.getTask(id).text
+    window.location.href="/projects/"+number;
+    });
+    gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e){
+      return false;
+    });
+
+    var dp = new dataProcessor("<%= payments_path %>");
+    dp.init(gantt);
+    dp.setTransactionMode("REST");
+
+</script>
+

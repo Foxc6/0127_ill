@@ -1,0 +1,16 @@
+<% if @agency_projects.any? %>
+  <table class="project-focus">
+    <tbody>
+      <% @agency_projects.each do |project| %>
+        <tr>
+          <td><%= link_to project.project_number, project %></td>
+          <td><%= link_to project.name, project %></td>
+          <td><%= link_to project.project_state.name, project %></td>
+        </tr>
+      <% end %>
+      <%= will_paginate @projects %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty">No projects yet.</p>
+<% end %>

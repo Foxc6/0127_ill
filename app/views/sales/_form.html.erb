@@ -1,0 +1,239 @@
+<div class="has-limit">
+	<div class="row">
+		<%= nested_form_for @project, :url => "/sales/#{@project.case_number}" do |f| %>
+			<div class="bar-header col-sm-12 col-md-12">
+				<% unless @project.case_number.present? %>
+					<h2><%= action_name %> Case</h2>
+				<% else %>
+					<h2><%= action_name %> Case: <%= @project.case_number %></h2>
+				<% end %>
+			</div>
+			<div class="col-sm-12 col-md-6">
+				<% if @project.errors.any? %>
+					<div id="error_explanation">
+						<h2><%= pluralize(@project.errors.count, "error") %> prohibited this contact from being saved:</h2>
+						<ul>
+							<% @project.errors.full_messages.each do |message| %>
+								<li><%= message %></li>
+							<% end %>
+						</ul>
+					</div>
+				<% end %>
+				<div class="edit-pro-info">
+					<div class="form-group edit-pro-contact">
+						<fieldset class="name">
+							<%= f.label :name %>
+							<%= f.text_field :name %>
+						</fieldset>
+
+						<fieldset class="company">
+							<%= f.label :company %>
+							<% unless @project.client.blank? %>
+								<%= f.collection_select "client_contact_id", @clients, "id", "company_name",
+								{include_blank: true, selected: @project.client_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Company', 'value' => @project.client.full_name} } %>
+							<% else %>
+								<%= f.collection_select "client_contact_id",
+								@clients, "id", "company_name", {include_blank: true, selected: @project.client_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Company'} } %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="agency">
+							<div class="field">
+								<%= f.label :agency %>
+									<% unless @project.agency.blank? %>
+										<%= f.collection_select "agency_client_contact_id",
+										@agencies, "id", "company_name",
+										{include_blank: true, selected: @project.agency_client_contact_id},
+										{class: 'chosen-select', :data => {'placeholder' => 'Agency', 'value' => @project.agency.id} } %>
+									<% else %>
+										<%= f.collection_select "agency_client_contact_id",
+										@agencies, "id", "company_name",
+										{include_blank: true, selected: @project.agency_client_contact_id},
+										{class: 'chosen-select', :data => {'placeholder' => 'Agency'} } %>
+									<% end %>
+							</div>
+						</fieldset>
+
+						<fieldset class="start-date">
+							<%= f.label :start_date %>
+							<div class='input-group date' class='datepicker'>
+								<% unless @project.start_date.blank? %>
+									<input type="text" id="prject-start-date-picker" name="project-date-picker" class="project-date-picker" value="<%= @project.start_date.strftime('%m/%d/%Y') %>" autocomplete="off" data-proxy="start_date" />
+								<% else %>
+									<input type="text" id="prject-start-date-picker" name="project-date-picker" class="project-date-picker" autocomplete="off" data-proxy="start_date" />
+								<% end %>
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+								<%= f.hidden_field :start_date, :value => @project.start_date, :id => "start_date" %>
+							</div>
+						</fieldset>
+
+						<fieldset class="end-date">
+							<%= f.label :end_date %>
+							<div class='input-group date' class='datepicker'>
+								<% unless @project.end_date.blank? %>
+									<input type="text" id="project-end-date-date-picker" name="project-date-picker" class="project-date-picker" value="<%= @project.end_date.strftime('%m/%d/%Y') %>" autocomplete="off" data-proxy="end_date" />
+								<% else %>
+									<input type="text" id="project-end-date-date-picker" name="project-date-picker" class="project-date-picker" autocomplete="off" data-proxy="end_date" />
+								<% end %>
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+								<%= f.hidden_field :end_date, :value => @project.end_date, :id => "end_date" %>
+							</div>
+						</fieldset>
+
+						<fieldset class="project-type">
+							<%= f.label :project_type %>
+							<% unless @project.project_type.blank? %>
+								<%= f.collection_select "project_type_id",
+								@project_types, "id", "name",
+								{include_blank: true, selected: @project.project_type_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Project Type', 'value' => @project.project_type.name}} %>
+							<% else %>
+								<%= f.collection_select "project_type_id",
+								@project_types, "id", "name",
+								{include_blank: true, selected: @project.project_type_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Project Type'}} %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="project-url">
+							<%= f.label :project_url %>
+							<%= f.text_field :url %>
+						</fieldset>
+
+						<fieldset class="form-group primary-contact">
+							<%= f.label :primary_contact %>
+							<% unless @project.primary_contact.blank? %>
+								<%= f.collection_select "primary_contact_id",
+								@contacts, "id", "full_name",
+								{include_blank: true, selected: @project.primary_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Primary Contact', 'value' => @project.primary_contact.full_name} } %>
+							<% else %>
+								<%= f.collection_select "primary_contact_id",
+								@contacts, "id", "full_name",
+								{include_blank: true, selected: @project.primary_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Primary Contact'} } %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="sale-contact">
+							<%= f.label :sales_contact %>
+							<% unless @project.sale_contact.blank? %>
+								<%= f.collection_select "sale_contact_id",
+								@contacts, "id", "full_name",
+								{include_blank: true, selected: @project.sale_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Sales Contact', 'value' => @project.sale_contact.full_name} } %>
+							<% else %>
+								<%= f.collection_select "sale_contact_id",
+								@contacts, "id", "full_name",
+								{include_blank: true, selected: @project.sale_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Sales Contact'} } %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="referral-contact">
+							<%= f.label :referral_contact %>
+							<% unless @project.referral_contact.blank? %>
+								<%= f.collection_select "referral_contact_id",
+								@contacts, "id", "full_name",
+								{include_blank: true, selected: @project.referral_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Referral Contact', 'value' => @project.referral_contact.full_name} } %>
+							<% else %>
+								<%= f.collection_select "referral_contact_id",
+								@contacts, "id", "full_name",
+								{include_blank: true, selected: @project.referral_contact_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Referral Contact'} } %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="sale-case-status">
+							<%= f.label :status %>
+							<% unless @project.sale_case_status.blank? %>
+								<%= f.collection_select "sale_case_status_id",
+								SaleCaseStatus.all, "id", "name",
+								{include_blank: true, selected: @project.sale_case_status_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Status', 'value' => @project.sale_case_status.name} } %>
+							<% else %>
+								<%= f.collection_select "sale_case_status_id",
+								SaleCaseStatus.all, "id", "name",
+								{include_blank: true, selected: @project.sale_case_status_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Status'} } %>
+							<% end %>
+						</fieldset>
+					</div>
+				</div>
+				<br>
+				<div class="form-group">
+					<%= f.label :notes %><br>
+					<%= f.text_area :notes %>
+				</div>
+
+				<div class="actions">
+					<%= f.submit "Save" %>
+					<%= f.submit "Save and Continue" %>
+					<% if @project.case_number.present? %>
+						<% if @project.project_state %>
+
+							<% if @project.project_state.present? && @project.project_state.name != 'Active' %>
+								<button class="activate-project-button"><%= link_to 'Become Project', activate_project_path(@project), method: :post, data: {confirm: 'are you sure?'} %></button>
+							<% end %>
+
+						<% end %>
+						<%= link_to 'Cancel', sale_path(@project.case_number) %>
+					<% else %>
+						<%= link_to 'Cancel', sales_path %>
+					<% end %>
+				</div>
+			</div>
+
+			<div class="col-sm-12 col-md-6">
+				<div class="form-group project-contacts">
+					<div class="bar-header">
+						<h4>Contacts</h4>
+					</div>
+					<%= f.fields_for :project_contacts do |project_contact| %>
+					<%= project_contact.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+						<% unless project_contact.object.contact.blank? %>
+							<%= project_contact.collection_select "contact_id",
+							@contacts, "id", "full_name",
+							{include_blank: true, selected: project_contact.object.contact_id },
+							{class: 'chosen-select', :data => {'placeholder' => 'Contacts', 'value' => project_contact.object }} %>
+						<% else %>
+							<%= project_contact.collection_select "contact_id",
+							@contacts, "id", "full_name",
+							{include_blank: true, selected: project_contact.object.contact_id },
+							{class: 'chosen-select', :data => {'placeholder' => 'Contacts'}} %>
+						<% end %>
+						<%= project_contact.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+					<% end %>
+					<%= f.link_to_add " + Add Contact", :project_contacts %>
+				</div>
+				<div class="actions">
+					<%= f.submit "Save" %>
+					<%= f.submit "Save and Continue" %>
+					<% if @project.case_number.present? %>
+						<% if @project.project_state %>
+							<% if @project.project_state.present? && @project.project_state.name != 'Active' %>
+								<button class="activate-project-button"><%= link_to 'Become Project', activate_project_path(@project), method: :post, data: {confirm: 'are you sure?'} %></button>
+							<% end %>
+
+						<% end %>
+						<% if @project.project_state.present? && @project.project_state.name != 'Sales' %>
+							<%= f.hidden_field :project_state_id, value: @archive_id %>
+							<%= f.submit "Archive Project", data: {confirm: 'are you sure?'} %>
+						<% end %>
+						<%= link_to 'Cancel', sale_path(@project.case_number) %>
+					<% else %>
+						<%= link_to 'Cancel', sales_path %>
+					<% end %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
+

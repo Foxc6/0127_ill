@@ -1,0 +1,29 @@
+<div class="grid-list">
+  <ul class="has-limit extended30">
+    <% @contacts.each do |contact| %>
+      <li>
+        <div class="list-card">
+          <% if contact.profile_image.url.include? 'svg' %>
+            <%= link_to image_tag(contact.profile_image.url(:original)), client_path(contact) %>
+          <% else %>
+            <%= link_to image_tag(contact.profile_image.url(:medium)), client_path(contact) %>
+          <% end %>
+          <div class="contents">
+            <span class="name-title-txt">
+              <span class="name"><%= link_to truncate(contact.company_name, :length => 90), client_path(contact) %></span>
+              <br>
+              <span class="title"><%= contact.slug %></span>
+              <br>
+              <span class="project-number"><%= contact.projects_count %></span>
+              <div class="list-card-foot">
+                <div class="actions">
+                  <a href="<%= contact.website_url %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

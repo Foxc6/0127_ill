@@ -1,0 +1,22 @@
+<% if @addresses.any? %>
+	<% @addresses.each do |address| %>
+		<li class="address no-border">
+			<h4><%= address.name %></h4>
+			<div class="value">
+				<p class="full-address">
+					<span><%= address.address1 %></span>
+					<br>
+					<% if address.address2.present? %>
+						<span><%= address.address2 %></span>
+						<br>
+					<% end %>
+					<% state = State.where(id: address.state_id).first %>
+					<span><%= "#{address.city}, #{state.name} #{address.postal_code}" %></span>
+					<% country = Country.where(id: address.country_id).first %>
+					<br>
+					<span><%= country.name %></span>
+				</p>
+			</div>
+		</li>
+	<% end %>
+<% end %>

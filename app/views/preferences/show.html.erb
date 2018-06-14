@@ -1,0 +1,87 @@
+<div class="has-limit">
+  <div class="row">
+    <div class="sales-cases col-sm-12 col-md-6">
+      <div class="bar-header">
+        <h2>Preferences</h2>
+      </div>
+      <%  %>
+      <p>
+        <strong>Name:</strong>
+          <%= @preference.name %>
+      </p>
+
+      <p>
+        <strong>Company:</strong>
+        <%= @preference.company %>
+      </p>
+
+      <p>
+        <strong>URL:</strong>
+        <%= @preference.url %>
+      </p>
+
+      <p>
+        <strong>SEO Title: </strong>
+        <%= @preference.seo_title %>
+      </p>
+
+      <p>
+        <strong>Mail From Address: </strong>
+        <%= @preference.mail_from_address %>
+      </p>
+
+      <p>
+        <strong>Logo: </strong>
+        <%= image_tag(@preference.logo(:thumb)) %>
+      </p>
+
+      <p>
+        <strong>Default Country: </strong>
+        <%= @preference.default_country_code %>
+      </p>
+
+      <%= link_to 'Back', preference_path %>
+      <%= link_to 'Edit', edit_preference_path(@preference) %>
+    </div>
+  </div>
+</div>
+<h4>options</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @options.each do |option| %>
+        <%= form_for option do |f| %>
+          <input type="hidden" name="preference" value=<%= @preference.id %>>
+          <tr>
+            <td><%= option.key %></td>
+            <% if option.value.present? %>
+              <td><%= option.value %></td>
+            <% else %>
+              <td style="color:red;"> Please Set This Value
+                <%= f.text_field :value %>
+                <%= f.submit %>
+              </td>
+            <% end %>
+            <td>
+              <div class="actions">
+                <%= link_to 'Edit  ', edit_option_path(option) %>
+                <%= link_to raw('<i class="fa fa-times-circle"></i>'), option, method: :delete, data: { confirm: 'Are you sure?' } %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Option', new_option_path %>

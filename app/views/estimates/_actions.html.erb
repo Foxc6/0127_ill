@@ -1,0 +1,9 @@
+<div class="actions">
+  <%= f.submit "Save" %>
+  <%= f.submit "Save and Continue" %>
+  <% if @estimate %>
+    <%= link_to 'Cancel', @estimate %>
+    <% else %>
+    <%= link_to 'Cancel', estimates_path %>
+  <% end %>
+</div>

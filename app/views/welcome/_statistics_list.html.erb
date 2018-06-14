@@ -1,0 +1,27 @@
+<table>
+  <thead>
+    <tr>
+      <th>Sales Goal</th>
+      <th>Quarterly Sales Goal</th>
+      <th>Progress</th>
+      <th>Sales Target</th>
+      <th>Days to Sell</th>
+      <th>Days Since Last Sale</th>
+      <th>Active Recieved Total</th>
+      <th>Active Outstanding Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <tr>
+        <td><%= number_to_currency(@yearly_sales_goal) %></td>
+        <td><%= number_to_currency(@quarterly_sales_goal) %></td>
+        <td><%= number_to_currency(@year_received_total) %></td>
+        <td><%= number_to_currency(@sales_target) %></td>
+        <td><%= @days_to_sell %></td>
+        <td><%= @days_since_last_sale %></td>
+        <td><%= number_to_currency(@active_sales_total) %></td>
+        <td><%= number_to_currency(@active_estimated_total) %></td>
+      </tr>
+  </tbody>
+</table>

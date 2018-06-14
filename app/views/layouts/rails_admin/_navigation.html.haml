@@ -1,0 +1,6 @@
+.container-fluid
+  .navbar-header
+    %a.brand.pjax{:href => dashboard_path}
+      = image_tag( 'logo.svg')
+  .collapse.navbar-collapse
+    = render partial: 'layouts/rails_admin/secondary_navigation'

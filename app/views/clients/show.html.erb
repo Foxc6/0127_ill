@@ -1,0 +1,482 @@
+<div class="has-limit">
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			<div class="details clear profile-card form-holder">
+				<div class="card">
+					<div class="img-holder">
+						<%= image_tag(@contact.profile_image.url(:medium)) %>
+					</div>
+					<div class="profile-card-copy">
+						<h3>
+						<%  %>
+							<%= @contact.full_name %>
+							<span class="edit-toggle fa fa-pencil" aria-hidden="true"></span>
+						</h3>
+						<p class="title">
+							<%= @contact.slug %>
+						</p>
+						<p class="company_name">
+							<% if @contact.present? %>
+								<% if @contact.is_client %>
+									<% if @contact.profile_image.present? %>
+										<% if @contact.profile_image.url.include? 'svg' %>
+											<%= link_to(image_tag(@contact.profile_image.url(:original)), client_path(@contact)) %>
+										<% else %>
+											<%= link_to(image_tag(@contact.profile_image.url(:medium)), client_path(@contact)) %>
+										<% end %>
+									<% end %>
+									<span><%= link_to( @contact.full_name, @contact) %></span>
+								<% else %>
+									<% if @contact.profile_image.present? %>
+										<% if @contact.profile_image.url.include? 'svg' %>
+											<%= link_to(image_tag(@contact.profile_image.url(:original)), client_path(@contact)) %>
+										<% else %>
+											<%= link_to(image_tag(@contact.profile_image.url(:medium)), client_path(@contact)) %>
+										<% end %>
+									<% end %>
+									<span><%= link_to( @contact.full_name, client_path(@contact)) %></span>
+								<% end %>
+							<% end %>
+						</p>
+						<ul class="what-where-when">
+							<li>
+								<p class="contact-type">
+									<%= @contact.contact_type.name %>
+								</p>
+							</li>
+							<% unless @contact.time_zone.blank? %>
+								<li>
+									<p class="time-zone">
+										<%= raw @contact.time_zone.name %>
+									</p>
+								</li>
+							<% end %>
+							<li>
+								<p class="since">Since <%= @contact.created_at.strftime('%Y') %></p>
+							</li>
+						</ul>
+						<ul class="what-where-when">
+							<li>
+								<p class="contact-type">
+									Total Paid Invoices: <%= number_to_currency(@contact.client_paid_invoice_total) %>
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="edit-form">
+					<%= nested_form_for @contact, :url => "/clients/#{@contact.slug}" do |f| %>
+						<div>
+							<% if @contact.errors.any? %>
+								<div id="error_explanation">
+									<h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+									<ul>
+										<% @contact.errors.full_messages.each do |message| %>
+											<li><%= message %></li>
+										<% end %>
+									</ul>
+								</div>
+							<% end %>
+							<div class="edit-pro-info">
+								<div class="form-group edit-pro-img">
+									<div class="image-preview">
+										<% if @contact.profile_image.present? %>
+											<%= image_tag(@contact.profile_image.url(:thumb)) %>
+										<% else %>
+											<%= image_tag("/images/medium/missing.png") %>
+										<% end %>
+									</div>
+									<%= f.file_field :profile_image, class: 'form-control'%>
+								</div>
+								<div class="form-group edit-pro-contact">
+									<span class="close">
+										<span class="line two"></span>
+										<span class="line three"></span>
+									</span>
+									<fieldset class="slug">
+										<%= f.label :slug %>
+										<%= f.text_field :slug, :maxlength => 3, :style => 'text-transform: uppercase;' %>
+									</fieldset>
+									<script type="text/javascript">
+										var oFormField = document.getElementById('contact_slug');
+										oFormField.onkeydown = oFormField.onkeyup = function() {
+										oFormField.value = oFormField.value.toUpperCase();
+										oFormField.value = oFormField.value.replace(/[^A-Z]/, '');
+										}
+									</script>
+									<fieldset>
+										<%= f.label :company_name %>
+										<%= f.text_field :company_name %>
+									</fieldset>
+									<div class="form-group contact">
+										<div class="field">
+											<% unless @contact.time_zone.blank? %>
+												<%= f.label :time_zone %>
+												<%= f.collection_select "time_zone_id",
+													TimeZone.all, "id", "name",
+													{include_blank: true, selected: @contact.time_zone_id},
+													{ class: 'chosen-select', :data => {'placeholder' => 'Time Zone', 'value' => raw(@contact.time_zone.name)}} %>
+											<% else %>
+												<%= f.label :time_zone %>
+												<%= f.collection_select "time_zone_id",
+													TimeZone.all, "id", "name",
+													{include_blank: true, selected: @contact.time_zone_id},
+													{ class: 'chosen-select', :data => {'placeholder' => 'Time Zone'}} %>
+											<% end %>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br>
+							<%= render :partial => 'clients/actions', :locals => {:contacts => @contacts, :f => f} %>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Start of new build block -->
+
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			<div class="info-block form-holder">
+				<div class="info-block-head">
+					<ul>
+						<li class="current"><a>Overview</a></li>
+						<li class=""><a>Contact Info</a></li>
+						<li class=""><a>Social Networks</a></li>
+						<% if @contact.is_team then %><li class=""><a>Skills</a></li><% end %>
+					</ul>
+					<span class="edit-toggle fa fa-pencil" aria-hidden="true"></span>
+					<span class="close">
+						<span class="line two"></span>
+						<span class="line three"></span>
+					</span>
+				</div>
+				<div class="info-block-content">
+					<ul>
+						<li class="current">
+							<ul class="split">
+								<% unless @contact.directional_motivation.blank? %>
+									<li class="contact-directional-motivation">
+										<h4>Directional Motivation</h4>
+										<div class="value">
+											<p class="directional-motivation">
+												<%= raw @contact.directional_motivation.name %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% unless @contact.self_expression_type.blank? %>
+									<li class="contact-self-expression-type">
+										<h4>Self Expression Type</h4>
+										<div class="value">
+											<p class="self-expression-type">
+												<%= @contact.self_expression_type.name %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% if @contact.agenda.present? %>
+									<li class="contact-agenda wysiwyg">
+										<h4>Agenda</h4>
+										<div class="value">
+											<%= @contact.agenda.html_safe %>
+										</div>
+									</li>
+								<% end %>
+								<% if @contact.wants_general.present? %>
+									<li class="contact-wants-general wysiwyg">
+										<h4>Wants General</h4>
+										<div class="value">
+											<%= @contact.wants_general.html_safe %>
+										</div>
+									</li>
+								<% end %>
+								<% if @contact.wants_specifically.present? %>
+									<li class="contact-wants-specifically wysiwyg">
+										<h4>Wants Specifically</h4>
+										<div class="value">
+											<%= @contact.wants_specifically.html_safe %>
+										</div>
+									</li>
+								<% end %>
+								<% if @contact.values.present? %>
+									<li class="contact-values wysiwyg">
+										<h4>Values</h4>
+										<div class="value">
+											<%= @contact.values.html_safe %>
+										</div>
+									</li>
+								<% end %>
+								<% if @contact.about.present? %>
+									<li class="contact-about wysiwyg">
+										<h4>About</h4>
+										<div class="value">
+											<%= @contact.about.html_safe %>
+										</div>
+									</li>
+								<% end %>
+							</ul>
+							<div class="edit-form">
+								<%= nested_form_for @contact, :url => "/clients/#{@contact.slug}" do |f| %>
+									<div>
+										<% if @contact.errors.any? %>
+											<div id="error_explanation">
+												<h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+												<ul>
+													<% @contact.errors.full_messages.each do |message| %>
+														<li><%= message %></li>
+													<% end %>
+												</ul>
+											</div>
+										<% end %>
+										<div class="edit-pro-info">
+											<div class="form-group edit-pro-contact">
+												<fieldset>
+													<%= f.label :company_name %>
+													<%= f.text_field :company_name %>
+												</fieldset>
+												<br>
+												<fieldset>
+													<%= f.label :payee_name %>
+													<%= f.text_field :payee_name %>
+												</fieldset>
+												<br>
+												<div class="form-group edit-group contacts">
+													<div class="bar-header">
+														<h4>Contacts</h4>
+													</div>
+													<%= f.fields_for :client_contacts do |client_contact| %>
+														<%= client_contact.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+														<% unless client_contact.object.contact.blank? %>
+															<%= client_contact.collection_select "client_id",
+															@contacts, "id", "full_name",
+															{include_blank: true, selected: client_contact.object.client_id },
+															{:data => {'placeholder' => 'Contacts', 'value' => client_contact.object }} %>
+														<% else %>
+															<%= client_contact.collection_select "client_id",
+															@contacts, "id", "full_name",
+															{include_blank: true, selected: client_contact.object.client_id },
+															{:data => {'placeholder' => 'Contacts'}} %>
+														<% end %>
+														<%= f.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+													<% end %>
+													<%= f.link_to_add " + Add Contact", :client_contacts %>
+												</div>
+												<div class="form-group">
+													<%= f.label :about %><br>
+													<%= f.text_area :about %>
+												</div>
+											</div>
+										</div>
+										<br>
+										<%= render :partial => 'clients/actions', :locals => {:contacts => @contacts, :f => f} %>
+									</div>
+								<% end %>
+							</div>
+						</li>
+						<li>
+							<ul class="split has-border">
+								<%= render :partial => 'emails/list', :locals => {:@contact => @contact} %>
+								<%= render :partial => 'phone_numbers/list', :locals => {:phone_numbers => @phone_numbers} %>
+								<%= render :partial => 'website_urls/list', :locals => {:@contact => @contact} %>
+								<%= render :partial => 'addresses/list', :locals => {:addresses => @addresses} %>
+							</ul>
+							<div class="edit-form">
+								<%= nested_form_for(@contact) do |f| %>
+									<div>
+										<% if @contact.errors.any? %>
+											<div id="error_explanation">
+												<h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+												<ul>
+													<% @contact.errors.full_messages.each do |message| %>
+														<li><%= message %></li>
+													<% end %>
+												</ul>
+											</div>
+										<% end %>
+										<div class="edit-pro-info">
+											<div class="form-group edit-group emails">
+												<div class="bar-header">
+													<h4>Emails</h4>
+												</div>
+												<fieldset>
+													<%= f.label :primary_email %>
+													<%= f.text_field :email %>
+												</fieldset>
+												<%= f.fields_for :emails do |email| %>
+													<%= email.text_field  :name, :class =>'odd', :placeholder => 'Name'  %>
+													<%= email.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+													<%= email.text_field  :email, :placeholder => 'Email'  %>
+												<% end %>
+												<%= f.link_to_add "+ Add Email", :emails %>
+											</div>
+											<div class="form-group edit-group phone-numbers">
+												<div class="bar-header">
+													<h4>Phone Numbers</h4>
+												</div>
+												<%= f.fields_for :phone_numbers do |phone_number| %>
+													<%= phone_number.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+													<%= phone_number.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+													<%= phone_number.text_field  :number, :placeholder => 'Number'  %>
+												<% end %>
+												<%= f.link_to_add " + Add Phone Number", :phone_numbers %>
+											</div>
+
+											<div class="form-group edit-group urls">
+												<div class="bar-header">
+													<h4>URLs</h4>
+												</div>
+												<fieldset class="website_url">
+													<%= f.label :website_url %>
+													<%= f.text_field :website_url %>
+												</fieldset>
+												<%= f.fields_for :website_urls do |website_url| %>
+													<%= website_url.text_field  :name, :class =>'odd', :placeholder => 'Name'  %>
+													<%= website_url.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+													<%= website_url.text_field  :url, :placeholder => 'URL'  %>
+												<% end %>
+												<%= f.link_to_add "+ Add URL", :website_urls %>
+											</div>
+
+											<div class="form-group edit-group addresses half">
+												<div class="bar-header">
+													<h4>Addresses</h4>
+												</div>
+												<%= f.fields_for :addresses do |address| %>
+													<%= address.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+													<%= address.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+													<br>
+													<%= address.text_field  :address1, :class =>'odd', :placeholder => 'Address 1'  %>
+													<%= address.text_field  :address2, :placeholder => 'Address 2'  %>
+													<%= address.text_field  :city, :class =>'odd', :placeholder => 'City'  %>
+
+													<% unless address.blank? %>
+														<% state = State.where(id: address.object.state_id).first %>
+														<% unless state.blank? %>
+															<%= address.select( "state_id", options_from_collection_for_select(@states, "id", "name", state.id), include_blank: true) %>
+														<% else %>
+															<%= address.select( "state_id", options_from_collection_for_select(@states, "id", "name"), include_blank: true) %>
+														<% end %>
+													<% end %>
+
+													<%= address.text_field  :postal_code, :class =>'odd', :placeholder => 'Postal Code'  %>
+													<%= address.hidden_field  :country_id, :value => @default_country  %>
+												<% end %>
+												<%= f.link_to_add " + Add Address", :addresses %>
+											</div>
+										</div>
+										<br>
+										<%= render :partial => 'clients/actions', :locals => {:contacts => @contacts, :f => f} %>
+									</div>
+								<% end %>
+							</div>
+						</li>
+						<li>
+							<ul class="full">
+								<%= render :partial => 'social_reaches/list', :locals => {:contact => @contact} %>
+							</ul>
+							<div class="edit-form">
+								<%= nested_form_for @contact, :url => "/clients/#{@contact.slug}" do |f| %>
+									<div>
+										<% if @contact.errors.any? %>
+											<div id="error_explanation">
+												<h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+												<ul>
+													<% @contact.errors.full_messages.each do |message| %>
+														<li><%= message %></li>
+													<% end %>
+												</ul>
+											</div>
+										<% end %>
+										<div class="edit-pro-info">
+											<div class="form-group edit-group-social social-reaches half">
+												<div class="bar-header">
+													<h4>Social Networks</h4>
+												</div>
+												<%= f.fields_for :social_reaches do |social_reach| %>
+													<%= social_reach.select( "social_network_id", options_from_collection_for_select(@social_networks, "id", "name", social_reach.object.social_network_id), include_blank: true)  %>
+
+													<br>
+													<%= social_reach.text_field :username, :class =>'odd', :placeholder => 'Username' %>
+													<%= social_reach.text_field  :total_reach, :placeholder => 'Total Reach'  %>
+												<% end %>
+												<%= f.link_to_add " + Add Social Network", :social_reaches %>
+											</div>
+										</div>
+										<br>
+										<%= render :partial => 'clients/actions', :locals => {:contacts => @contacts, :f => f} %>
+									</div>
+								<% end %>
+							</div>
+						</li>
+						<li>
+							<ul class="full skills has-border">
+								<%= render :partial => 'contact_skills/list', :locals => {:contact => @contact} %>
+							</ul>
+							<div class="edit-form">
+								<%= nested_form_for @contact, :url => "/clients/#{@contact.slug}" do |f| %>
+									<div>
+										<% if @contact.errors.any? %>
+											<div id="error_explanation">
+												<h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+												<ul>
+													<% @contact.errors.full_messages.each do |message| %>
+														<li><%= message %></li>
+													<% end %>
+												</ul>
+											</div>
+										<% end %>
+										<div class="edit-pro-info">
+										</div>
+										<br>
+										<%= render :partial => 'clients/actions', :locals => {:contacts => @contacts, :f => f} %>
+									</div>
+								<% end %>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-12 col-md-6">
+			<div class="info-block">
+				<div class="info-block-head">
+					<ul>
+						<% unless @projects.blank? %><% is_project = true %>
+							<li class="current"><a>Projects</a></li>
+						<% end %>
+						<% unless @agency_projects.blank? %>
+							<li <% if !is_project %> class="current" <% end %>><a>Agency Projects</a></li>
+						<% end %>
+						<li class=""><a>Contacts</a></li>
+					</ul>
+				</div>
+				<div class="info-block-content">
+					<ul>
+						<% unless @projects.blank? %>
+						<li class="current">
+							<ul class="full">
+								<%= render :partial => 'projects_list', :locals => {:projects => @projects} %>
+							</ul>
+						</li>
+						<% end %>
+						<% unless @agency_projects.blank? %>
+						<li>
+							<ul class="full">
+								<%= render :partial => 'agency_projects_list', :locals => {:agency_projects => @agency_projects} %>
+							</ul>
+						</li>
+						<% end %>
+						<li>
+							<%= render :partial => 'contacts_list', :locals => {:company_contacts => @company_contacts} %>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

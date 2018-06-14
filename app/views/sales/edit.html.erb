@@ -1,0 +1,6 @@
+ <div class="bar-header">
+  <% flash.each do |key, value| %>
+  <div id="error_explanation"><%= value %></div>
+  <% end %>
+</div>
+<%= render 'form' %>

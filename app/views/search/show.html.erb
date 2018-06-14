@@ -1,0 +1,112 @@
+<div class="table-holder">
+  <div class="has-limit extended14">
+    <table>
+      <thead class="pretty">
+        <tr>
+          <th class="avatar"><%= @total_hits %> results found for: "<span class="query"><%= @query %>"</th>
+          <th class="title"></th>
+          <th class="about"></th>
+        </tr>
+      </thead>
+      <tbody>
+  <% @search.each_hit_with_result do |hit, x| %>
+    <% case hit.class_name %>
+    <% when "Project" %>
+      <% if x.project_state.name == "Sales" %>
+        <tr class="override">
+          <td class="avatar">
+            <% unless x.client.blank? %>
+            <div class="holder">
+              <%= link_to( image_tag(x.thumbnail_image.url(:thumb)), sale_path(x) ) %>
+              <span class="name-title-txt">
+                <span class="name">
+                  <%= link_to truncate(x.name, :length => 90), sale_path(x) %>
+                </span>
+                <br>
+                <span class="title">
+                  <%= link_to x.project_number, sale_path(x) %>
+                </span>
+              </span>
+            </div>
+            <% end %>
+          </td>
+          <td class="notes">
+            <% str = strip_tags(x.notes) %>
+            <%= truncate(str, length: 50, :escape => false) %>
+          </td>
+        </tr>
+      <% else %>
+        <tr class="override">
+          <td class="avatar">
+            <% unless x.client.blank? %>
+            <div class="holder">
+              <%= link_to( image_tag(x.thumbnail_image.url(:thumb)), project_path(x) ) %>
+              <span class="name-title-txt">
+                <span class="name">
+                  <%= link_to truncate(x.name, :length => 90), project_path(x) %>
+                </span>
+                <br>
+                <span class="title">
+                  <%= link_to x.project_number, project_path(x) %>
+                </span>
+              </span>
+            </div>
+            <% end %>
+          </td>
+          <td class="notes">
+            <% str = strip_tags(x.notes) %>
+            <%= truncate(str, length: 50) %>
+          </td>
+        </tr>
+      <% end %>
+    <% when "Contact" %>
+      <% if x.is_client? %>
+         <tr class="override">
+          <td class="avatar">
+            <div class="holder">
+              <%= link_to( image_tag(x.profile_image.url(:thumb)), client_path(x) ) %>
+              <span class="name-title-txt">
+                <%= link_to truncate(x.full_name, :length => 90), client_path(x) %>
+              </span>
+            </div>
+          </td>
+          <td class="title">
+            <%= x.title %>
+          </td>
+          <td class="about">
+            <% if x.about.present? %>
+            <% str = strip_tags(x.about) %>
+              <%= truncate(str, length: 150) %>
+            <% end %>
+          </td>
+        </tr>
+      <% else %>
+         <tr class="override">
+          <td class="avatar">
+            <div class="holder">
+              <%= link_to( image_tag(x.profile_image.url(:thumb)), contact_path(x) ) %>
+              <span class="name-title-txt">
+                <%= link_to truncate(x.full_name, :length => 90), contact_path(x) %>
+              </span>
+            </div>
+          </td>
+          <td class="title">
+            <%= x.title %>
+          </td>
+          <td class="about">
+            <% if x.about.present? %>
+              <% str = strip_tags(x.about) %>
+              <%= truncate(str, length: 150) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+    </tbody>
+  </table>
+  </div>
+</div>
+<div class="has-limit pagination-block">
+  <%= will_paginate @search.results %>
+</div>

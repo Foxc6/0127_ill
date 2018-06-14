@@ -1,0 +1,22 @@
+<% if @project_team_members.any? %>
+<table class="team">
+  <tbody>
+    <% @project_team_members.each do |ptm| %>
+      <tr>
+        <td class="avatar">
+          <% if ptm.contact.profile_image.url.include? 'svg' %>
+          <%= link_to image_tag(ptm.contact.profile_image.url(:original)), ptm.contact %>
+          <% else %>
+          <%= link_to image_tag(ptm.contact.profile_image.url(:thumb)), ptm.contact %>
+          <% end %>
+          <%= link_to ptm.contact.full_name, ptm.contact %>
+        </td>
+        <td><%= ptm.name %></td>
+        <td><%= ptm.contact.team_projects.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p class="empty">No team members yet.</p>
+<% end %>

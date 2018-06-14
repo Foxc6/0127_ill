@@ -1,0 +1,9 @@
+<div class="actions">
+	<%= f.submit "Save" %>
+	<%= f.submit "Save and Continue" %>
+	<% if @contact %>
+	<%= link_to 'Cancel', '/clients' %>
+	<% else %>
+	<%= link_to 'Cancel', '/clients' %>
+	<% end %>
+</div>

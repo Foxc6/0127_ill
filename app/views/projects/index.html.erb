@@ -1,0 +1,33 @@
+<div class="row bar-header full-bg">
+  <div class="col-sm-12 col-md-12">
+    <div class="has-limit">
+      <% flash.each do |key, value| %>
+      <div id="error_explanation"><%= value %></div>
+      <% end %>
+      <h2>Projects</h2>
+      <%= link_to '+ New Project', new_project_path %>
+    </div>
+  </div>
+</div>
+<div class="row utility-bar">
+  <div class="col-sm-12 col-md-12">
+    <div class="has-limit">
+      <ul class="utility">
+        <li>Total: <span class="<%= @total_records_clr %>"><%= @total_records %></span></li>
+        <li>Goal: <span class="green"><%= @total_records_goal %></span></li>
+        <li class="view list-view current"><i class="fa fa-th-list" aria-hidden="true"></i></li>
+        <li class="view grid-view"><i class="fa fa-th" aria-hidden="true"></i></li>
+      </ul>
+      <br>
+      <ul class="main-filter">
+        <li <% if !params['filter'].present? || params['filter'] == 'active' then %>class="current"<% end %>><a href="/projects">Active</a></li>
+        <li <% if params['filter'] == 'paused' then %>class="current"<% end %>><a href="/projects?filter=paused">Paused</a></li>
+        <li <% if params['filter'] == 'complete' then %>class="current"<% end %>><a href="/projects?filter=complete">Complete</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="layout row">
+  <%= render :partial => 'projects/grid', :locals => {:projects => @projects} %>
+  <%= render :partial => 'projects/list', :locals => {:projects => @projects} %>
+</div>

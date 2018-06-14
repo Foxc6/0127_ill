@@ -1,0 +1,70 @@
+<div class="table-holder">
+	<div class="has-limit extended14">
+		<% if @projects.any? %>
+			<table>
+				<thead class="pretty">
+					<tr>
+						<th class="avatar"><%= sortable "name" %></th>
+						<th class="company centered"><%= sortable "client" %></th>
+						<th class="centered"><%= sortable "recieved" %></th>
+						<th class="centered"><%= sortable "outstanding" %></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @projects.each do |project| %>
+						<tr class="override">
+							<td class="avatar">
+								<% unless project.client.blank? %>
+									<div class="holder">
+										<%= link_to( image_tag(project.thumbnail_image.url(:thumb)), project_path(project) ) %>
+										<span class="name-title-txt">
+											<span class="name">
+												<%= link_to truncate(project.name, :length => 90), project %>
+											</span>
+											<br>
+											<span class="title">
+												<%= link_to project.project_number, project_path(project) %>
+											</span>
+										</span>
+									</div>
+								<% end %>
+							</td>
+							<td class="company centered">
+								<% if project.client  %>
+									<% if project.client.profile_image.url.include? 'svg' %>
+										<%= link_to( image_tag(project.client.profile_image.url(:original)), client_path(project.client) ) %>
+									<% else %>
+										<%= link_to( image_tag(project.client.profile_image.url(:thumb)), client_path(project.client) ) %>
+									<% end %>
+								<% end %>
+							</td>
+							<% if project.total > 0 %>
+							<td class="centered"><span class="green"><%= number_to_currency(project.total) %></span></td>
+							<% else %>
+							<td class="centered"><%= number_to_currency(project.total) %></td>
+							<% end %>
+							
+							<% if project.estimated_total - project.total > 0 %>
+							<td class="centered"><span class="red"><%= number_to_currency(project.estimated_total - project.total) %></span></td>
+							<% else %>
+							<td class="centered"><%= number_to_currency(project.estimated_total - project.total) %></td>
+							<% end %>
+							<td class="actions">
+								<a href="<%= project.url %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
+	</div>
+</div>
+
+<div class="has-limit pagination-block">
+	<% if @projects.any? %>
+		<%= will_paginate @projects, :previous_label => 'Prev', :next_label => 'Next'  %>
+	<% else %>
+		<p class="empty">No projects yet.</p>
+	<% end %>
+</div>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Edit', edit_estimate_path(@estimate) %> |
+<%= link_to 'Back', estimates_path %>
+
+<p><%= link_to "Print as PDF", estimate_path(@estimate, format: "pdf") %></p>
+
+<h1>Estimate</h1>
+<p><%= "Estimate No. #{@estimate.number}" %></p>
+<p><%= @company.company_name %></p>
+<p><%= @company_address.address1 %></p>
+<p><%= @company_address.address2 %></p>
+<p><%= @company_address.city + ", " +@company_state_name + " " +@company_address.postal_code %></p>
+<p><%= @company.website_url %></p>
+
+
+<p><%= @client.company_name %></p>
+<% if @client_address.present? %>
+  <p><%= @client_address.address1 %></p>
+  <p><%= @client_address.address2 %></p>
+  <p><%= @client_address.city + ", " +@client_state_name + " " +@client_address.postal_code %></p>
+<% else %>
+  <p><%= @no_client_string %></p>
+<% end %>
+
+<p><%= "Date: #{@estimate.date.strftime('%x')}" %></p>
+
+
+<p><%= "Total: #{number_to_currency(@estimate.total, :unit => "$")}" %></p>
+
+

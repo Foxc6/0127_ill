@@ -1,0 +1,58 @@
+<div class="has-gutter">
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <div class="details clear">
+        <div class="bar-header">
+          <h2>My Account</h2>
+          <%= link_to 'Edit', '/account/edit' %>
+        </div>
+        <div class="profile-main-pts">
+          <%= image_tag(current_user.avatar.url(:medium)) %>
+          <div class="profile-main-copy">
+            <h3>
+              <%= current_user.full_name %>
+            </h3>
+            <p class="title">
+              <%= current_user.locale.name %>
+            </p>
+            <p class="email">
+  					  <span class="heading">Email</span>
+  					  <a href="mailto:<%= current_user.email %>"><%= current_user.email %></a>
+  					</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <div class="activity clear">
+        <div class="bar-header">
+          <h2>Activity</h2>
+        </div>
+        <%= render :partial => 'activities/list', :locals => {:activities => @activities} %>
+        <ul class="link-block">
+          <li><a href="/account/activity">More&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="task clear">
+        <div class="bar-header">
+          <h2>Tasks</h2>
+        </div>
+        <%= render :partial => 'tasks/list', :locals => {:tasks => @tasks} %>
+        <ul class="link-block">
+          <li><a href="/account/tasks">More&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="project clear">
+        <div class="bar-header">
+          <h2>Projects</h2>
+        </div>
+        <%= render :partial => 'projects/list', :locals => {:projects => @projects} %>
+        <ul class="link-block">
+          <li><a href="/account/projects">More&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<%= form_for(@line_item_estimate) do |f| %>
+  <% if @line_item_estimate.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@line_item_estimate.errors.count, "error") %> prohibited this line item from being saved:</h2>
+
+      <ul>
+      <% @line_item_estimate.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset class="name">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </fieldset>
+
+  <fieldset class="name">
+    <%= f.label :price %>
+    <%= f.number_field :price, class: :text_field, step: :any %>
+  </fieldset>
+
+  <fieldset class="name">
+    <%= f.label :position %>
+    <%= f.text_field :position %>
+  </fieldset>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

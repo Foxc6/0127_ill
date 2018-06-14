@@ -1,0 +1,393 @@
+<div class="has-limit">
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			<div class="details clear profile-card form-holder">
+				<div class="card">
+					<div class="img-holder">
+						<% if @project.thumbnail_image.present? %>
+							<%= image_tag(@project.thumbnail_image.url(:medium)) %>
+						<% else %>
+							<%= image_tag(@project.client.profile_image.url(:medium)) %>
+						<% end %>
+					</div>
+					<div class="profile-card-copy">
+						<h3>
+							<%= @project.name %>
+
+							<span class="edit-toggle fa fa-pencil" aria-hidden="true"></span>
+						</h3>
+						<p class="title">
+							<%= @project.case_number %>
+						</p>
+						<p class="company_name">
+							<% if @project.client.is_client? %>
+								<% if @project.client.present? %>
+									<%= link_to( image_tag(@project.client.profile_image.url(:thumb)), client_path(@project.client) ) %>
+									<span><%= link_to(@project.client.full_name, client_path(@project.client)) %></span>
+								<% end %>
+							<% else %>
+								<%= link_to( image_tag(@project.client.profile_image.url(:thumb)), contact_path(@project.client) ) %>
+								<%= link_to @project.client.company_name, contact_path(@project.client) %>
+							<% end %>
+						</p>
+						<ul class="what-where-when">
+							<% unless @project.project_type.blank? %>
+								<li>
+									<p class="since">
+										<%= @project.project_type.name %>
+									</p>
+								</li>
+							<% end %>
+						</ul>
+					</div>
+				</div>
+				<div class="edit-form">
+					<%= nested_form_for @project, :url => "/sales/#{@project.case_number}" do |f| %>
+						<div>
+							<% if @project.errors.any? %>
+								<div id="error_explanation">
+									<h2><%= pluralize(@project.errors.count, "error") %> prohibited this contact from being saved:</h2>
+									<ul>
+										<% @project.errors.full_messages.each do |message| %>
+											<li><%= message %></li>
+										<% end %>
+									</ul>
+								</div>
+							<% end %>
+							<div class="edit-pro-info">
+								<div class="form-group edit-pro-img">
+									<% if @project.thumbnail_image.present? %>
+										<%= image_tag(@project.thumbnail_image.url(:thumb)) %>
+									<% else %>
+										<%= image_tag("/images/medium/missing.png") %>
+									<% end %>
+									<%= f.file_field :thumbnail_image, class: 'form-control'%>
+									<a class="img-upload-btn">Upload</a>
+								</div>
+								<div class="form-group edit-pro-contact">
+									<span class="close">
+										<span class="line two"></span>
+										<span class="line three"></span>
+									</span>
+									<fieldset class="name">
+										<%= f.label :name %>
+										<%= f.text_field :name %>
+									</fieldset>
+
+									<fieldset class="company">
+										<%= f.label :company %>
+										<% unless @project.client.blank? %>
+											<%= f.collection_select "client_contact_id", @clients, "id", "company_name",
+											{include_blank: true, selected: @project.client_contact_id},
+											{class: 'chosen-select', :data => {'placeholder' => 'Company', 'value' => @project.client.full_name} } %>
+										<% else %>
+											<%= f.collection_select "client_contact_id",
+											@clients, "id", "company_name", {include_blank: true, selected: @project.client_contact_id},
+											{class: 'chosen-select', :data => {'placeholder' => 'Company'} } %>
+										<% end %>
+									</fieldset>
+
+									<fieldset class="agency">
+										<div class="field">
+											<%= f.label :agency %>
+											<% unless @project.agency.blank? %>
+												<%= f.collection_select "agency_client_contact_id",
+												@agencies, "id", "company_name",
+												{include_blank: true, selected: @project.agency_client_contact_id},
+												{class: 'chosen-select', :data => {'placeholder' => 'Agency', 'value' => @project.agency.id} } %>
+											<% else %>
+												<%= f.collection_select "agency_client_contact_id",
+												@agencies, "id", "company_name",
+												{include_blank: true, selected: @project.agency_client_contact_id},
+												{class: 'chosen-select', :data => {'placeholder' => 'Agency'} } %>
+											<% end %>
+										</div>
+									</fieldset>
+								</div>
+								</div>
+							<br>
+							<%= render :partial => 'sales/actions', :locals => {:sales => @sales, :f => f} %>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			<div class="info-block form-holder">
+				<div class="info-block-head">
+
+					<ul>
+						<li class="current"><a>Overview</a></li>
+						<li class=""><a>Files</a></li>
+						<li class=""><a>Estimate</a></li>
+					</ul>
+					<span class="edit-toggle fa fa-pencil" aria-hidden="true"></span>
+					<span class="close">
+						<span class="line two"></span>
+						<span class="line three"></span>
+					</span>
+				</div>
+				<div class="info-block-content">
+					<ul>
+						<li class="current">
+							<ul class="split">
+								<% unless @project.url.blank? %>
+									<li>
+										<h4>URL</h4>
+										<div class="value">
+											<p>
+												<%= link_to(@project.url, @project.url, :target=>'_blank') %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% unless @project.start_date.blank? %>
+									<li>
+										<h4>Start Date</h4>
+										<div class="value">
+											<p>
+												<%= @project.start_date.to_time.strftime('%m/%d/%Y').downcase %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% unless @project.end_date.blank? %>
+									<li>
+										<h4>End Date</h4>
+										<div class="value">
+											<p>
+												<%= @project.end_date.to_time.strftime('%m/%d/%Y').downcase %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% unless @project.primary_contact.blank? %>
+									<li>
+										<h4>Primary Contact</h4>
+										<div class="value">
+											<p>
+												<%= link_to( image_tag(@project.primary_contact.profile_image.url(:thumb)), contact_path(@project.primary_contact) ) %>
+												<%= link_to @project.primary_contact.full_name, contact_path(@project.primary_contact) %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% unless @project.sale_contact.blank? %>
+									<li>
+										<h4>Sales Contact</h4>
+										<div class="value">
+											<p>
+												<%= link_to( image_tag(@project.sale_contact.profile_image.url(:thumb)), contact_path(@project.sale_contact) ) %>
+												<%= link_to @project.sale_contact.full_name, contact_path(@project.sale_contact) %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% unless @project.referral_contact.blank? %>
+									<li>
+										<h4>Referral Contact</h4>
+										<div class="value">
+											<p>
+												<%= link_to( image_tag(@project.referral_contact.profile_image.url(:thumb)), contact_path(@project.referral_contact) ) %>
+												<%= link_to @project.referral_contact.full_name, contact_path(@project.referral_contact) %>
+											</p>
+										</div>
+									</li>
+								<% end %>
+								<% if @project.notes.present? %>
+									<li>
+										<h4>Notes</h4>
+										<div class="value">
+											<%= @project.notes.html_safe %>
+										</div>
+									</li>
+								<% end %>
+							</ul>
+							<div class="edit-form">
+								<%= nested_form_for @project, :url => "/sales/#{@project.case_number}" do |f| %>
+									<div>
+										<% if @project.errors.any? %>
+											<div id="error_explanation">
+												<h2><%= pluralize(@project.errors.count, "error") %> prohibited this contact from being saved:</h2>
+												<ul>
+													<% @project.errors.full_messages.each do |message| %>
+														<li><%= message %></li>
+													<% end %>
+												</ul>
+											</div>
+										<% end %>
+										<div class="edit-pro-info">
+										<!-- this div was added to correct the layout -->
+										<div class="form-group edit-pro-contact">
+											<fieldset class="start-date">
+												<%= f.label :start_date %>
+												<div class='input-group date' class='datepicker'>
+													<% unless @project.start_date.blank? %>
+														<input type="text" id="prject-start-date-picker" name="project-date-picker" class="project-date-picker" value="<%= @project.start_date.strftime('%m/%d/%Y') %>" autocomplete="off" data-proxy="start_date" />
+													<% else %>
+														<input type="text" id="prject-start-date-picker" name="project-date-picker" class="project-date-picker" autocomplete="off" data-proxy="start_date" />
+													<% end %>
+													<span class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</span>
+													<%= f.hidden_field :start_date, :value => @project.start_date, :id => "start_date" %>
+												</div>
+											</fieldset>
+
+											<fieldset class="end-date">
+												<%= f.label :end_date %>
+												<div class='input-group date' class='datepicker'>
+													<% unless @project.end_date.blank? %>
+														<input type="text" id="project-end-date-date-picker" name="project-date-picker" class="project-date-picker" value="<%= @project.end_date.strftime('%m/%d/%Y') %>" autocomplete="off" data-proxy="end_date" />
+													<% else %>
+														<input type="text" id="project-end-date-date-picker" name="project-date-picker" class="project-date-picker" autocomplete="off" data-proxy="end_date" />
+													<% end %>
+													<span class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</span>
+													<%= f.hidden_field :end_date, :value => @project.end_date, :id => "end_date" %>
+												</div>
+											</fieldset>
+
+											<fieldset class="project-type">
+												<%= f.label :project_type %>
+												<% unless @project.project_type.blank? %>
+													<%= f.collection_select "project_type_id",
+													@project_types, "id", "name",
+													{include_blank: true, selected: @project.project_type_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Project Type', 'value' => @project.project_type.name}} %>
+												<% else %>
+													<%= f.collection_select "project_type_id",
+													@project_types, "id", "name",
+													{include_blank: true, selected: @project.project_type_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Project Type'}} %>
+												<% end %>
+											</fieldset>
+
+											<fieldset class="project-url">
+												<%= f.label :project_url %>
+												<%= f.text_field :url %>
+											</fieldset>
+
+											<fieldset class="form-group primary-contact">
+												<%= f.label :primary_contact %>
+												<% unless @project.primary_contact.blank? %>
+													<%= f.collection_select "primary_contact_id",
+													@contacts, "id", "full_name",
+													{include_blank: true, selected: @project.primary_contact_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Primary Contact', 'value' => @project.primary_contact.full_name} } %>
+												<% else %>
+													<%= f.collection_select "primary_contact_id",
+													@contacts, "id", "full_name",
+													{include_blank: true, selected: @project.primary_contact_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Primary Contact'} } %>
+												<% end %>
+											</fieldset>
+
+											<fieldset class="sale-contact">
+												<%= f.label :sales_contact %>
+												<% unless @project.sale_contact.blank? %>
+													<%= f.collection_select "sale_contact_id",
+													@contacts, "id", "full_name",
+													{include_blank: true, selected: @project.sale_contact_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Sales Contact', 'value' => @project.sale_contact.full_name} } %>
+												<% else %>
+													<%= f.collection_select "sale_contact_id",
+													@contacts, "id", "full_name",
+													{include_blank: true, selected: @project.sale_contact_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Sales Contact'} } %>
+												<% end %>
+											</fieldset>
+
+											<fieldset class="referral-contact">
+												<%= f.label :referral_contact %>
+												<% unless @project.referral_contact.blank? %>
+													<%= f.collection_select "referral_contact_id",
+													@contacts, "id", "full_name",
+													{include_blank: true, selected: @project.referral_contact_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Referral Contact', 'value' => @project.referral_contact.full_name} } %>
+												<% else %>
+													<%= f.collection_select "referral_contact_id",
+													@contacts, "id", "full_name",
+													{include_blank: true, selected: @project.referral_contact_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Referral Contact'} } %>
+												<% end %>
+											</fieldset>
+
+											<fieldset class="sale-case-status">
+												<%= f.label :status %>
+												<% unless @project.sale_case_status.blank? %>
+													<%= f.collection_select "sale_case_status_id",
+													@sale_case_statuses, "id", "name",
+													{include_blank: true, selected: @project.sale_case_status_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Status', 'value' => @project.sale_case_status.name} } %>
+												<% else %>
+													<%= f.collection_select "sale_case_status_id",
+													@sale_case_statuses, "id", "name",
+													{include_blank: true, selected: @project.sale_case_status_id},
+													{class: 'chosen-select', :data => {'placeholder' => 'Status'} } %>
+												<% end %>
+											</fieldset>
+											<br>
+											<div class="form-group">
+												<%= f.label :notes %><br>
+												<%= f.text_area :notes %>
+											</div>
+										</div>
+										</div>
+										<br>
+										<%= render :partial => 'sales/actions', :locals => {:sales => @sales, :f => f} %>
+									</div>
+								<% end %>
+							</div>
+						</li>
+						<li>
+							<ul>
+								<li>
+									<p class="empty">No files yet.</p>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<ul>
+								<li>
+									<p class="estimate">Create Estimate</p>
+									<form action="" method="post" accept-charset="utf-8" class="estimate-form">
+										<input type="file" name="pdf" placeholder="pdf">
+										<input type="text" name="" value="" placeholder="Estimate Number">
+										<input type="text" name="" value="" placeholder="tet">
+										<input type="submit" name="" value="Submit Estimate">
+									</form>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-12 col-md-6">
+			<div class="info-block">
+				<div class="info-block-head">
+					<ul>
+						<li class="current"><a>Contacts</a></li>
+					</ul>
+				</div>
+				<div class="info-block-content">
+					<ul>
+						<li class="current">
+							<%= render :partial => 'contacts_list', :locals => {:project_contacts => @project_contacts} %>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% flash.each do |key, value| %>
+		<%= content_tag :div, value, class: "flash #{key}" %>
+	<% end %>
+</div>
+

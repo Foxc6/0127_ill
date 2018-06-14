@@ -1,0 +1,50 @@
+
+<% if @payment_schedules.present? && @payment_schedules.length > 0 %>
+<table class="team">
+  <tbody>
+    <% @payment_schedules.each do |invoice| %>
+      <tr>
+        <td class="avatar">
+          <% unless invoice.contact.blank? %>
+            <%= link_to invoice.contact.full_name, invoice.contact %>
+          <% end %>
+        </td>
+        <td>
+          <% unless invoice.invoice_date.blank? %>
+            Date: <%= invoice.invoice_date.strftime('%m/%d/%Y') %>
+          <% end %>
+        </td>
+        <td>
+          <% unless invoice.payment_term.blank? %>
+            <%= invoice.payment_term.name %>
+          <% end %>
+        </td>
+        <td>
+          <% unless invoice.payment_status.blank? %>
+            <% if invoice.payment_status.name == 'Paid' %>
+              <% if invoice.received_date.present? %>
+              <%= invoice.payment_status.name %> :  <%= invoice.received_date.strftime('%m/%d/%Y') %>
+              <% end %>
+            <% else %>
+              <%= invoice.payment_status.name %>
+            <% end %>
+          <% end %>
+        </td>
+        <td>
+          <% unless invoice.total.blank? %>
+            <%= number_to_currency(invoice.total) %>
+          <% end %>
+        </td>
+        <td>
+          <% unless invoice.duration.blank? %>
+            <%= invoice.duration %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p class="empty">No Payments yet.</p>
+<% end %>
+

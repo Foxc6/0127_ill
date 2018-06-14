@@ -1,0 +1,13 @@
+<div class="bar-header">
+  <h2>Activity</h2>
+</div>
+<div class="utility-bar">
+	<%= form_tag(activities_path, :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search Activities" %>
+    <%= submit_tag "Search" %>
+  <% end %>
+  <ul>
+    <li><%= link_to '+ Create Activity', new_activity_path %></li>
+  </ul>
+</div>
+<%= render :partial => 'list', :locals => {:activities => @activities} %>

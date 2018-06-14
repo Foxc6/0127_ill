@@ -1,0 +1,21 @@
+<% if @project_contacts.any? %>
+<table class="team">
+  <tbody>
+    <% @project_contacts.each do |contact| %>
+      <tr>
+        <td class="avatar">
+          <% if contact.profile_image.url.include? 'svg' %>
+          <%= link_to image_tag(contact.profile_image.url(:original)), contact %>
+          <% else %>
+          <%= link_to image_tag(contact.profile_image.url(:thumb)), contact %>
+          <% end %> 
+          <%= link_to contact.full_name, contact %>
+        </td>
+        <td><%= contact.title %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p class="empty">No contacts yet.</p>
+<% end %>

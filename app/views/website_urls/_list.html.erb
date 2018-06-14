@@ -1,0 +1,17 @@
+<% if @website_urls.present? %>
+	<% @website_urls.each do |website_url| %>
+		<li class="website_url no-border">
+			<% if website_url.name.present?%>
+				<h4><%= website_url.name %></h4>
+				<div class="value">
+					<p><%= link_to website_url.url, website_url.url, :target=>'_blank' %></></p>
+				</div>
+			<% else %>
+				<h4>URL</h4>
+				<div class="value">
+					<p><%= link_to website_url.url, website_url.url, :target=>'_blank' %></p>
+				</div>
+			<% end %>
+		</li>
+	<% end %>
+<% end %>

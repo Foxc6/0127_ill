@@ -1,0 +1,85 @@
+<div class="hidden-form">
+  <%= form_for(@activity) do |f| %>
+    <% if @activity.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@activity.errors.count, "error") %> prohibited this activity from being saved:</h2>
+        <ul>
+        <% @activity.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+     <div class="new-edit">
+      <div class="form-group type">
+        <div class="field">
+          <%= f.label :activity_type %>
+          <% unless @activity.activity_type.blank? %>
+            <%= f.collection_select "activity_type_id",
+              @activity_types, "id", "name",
+              {include_blank: true, selected: @activity.activity_type_id},
+              {class: 'chosen-select', :data => {'placeholder' => 'Activity Type', 'value' => @activity.activity_type.name}} %>
+          <% else %>
+            <%= f.collection_select "activity_type_id",
+              @activity_types, "id", "name",
+              {include_blank: true, selected: @activity.activity_type_id},
+              {class: 'chosen-select', :data => {'placeholder' => 'Activity Type'}} %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group type">
+        <div class="field">
+          <%= f.label :activity_object %>
+          <% unless @activity.activity_object.blank? %>
+          <%= f.collection_select "activity_object_id",
+            @activity_objects, "id", "name",
+            {include_blank: true, selected: @activity.activity_object_id},
+            {class: 'chosen-select', :data => {'placeholder' => 'Activity Object', 'value' => @activity.activity_object.name}} %>
+          <% else %>
+            <%= f.collection_select "activity_object_id",
+              @activity_objects, "id", "name",
+              {include_blank: true, selected: @activity.activity_object_id},
+              {class: 'chosen-select', :data => {'placeholder' => 'Activity Object'}} %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group contact">
+        <div class="field">
+          <%= f.label :contact %>
+          <% unless @activity.contact.blank? %>
+            <%= f.collection_select "contact_id",
+              @contacts, "id", "full_name",
+              {include_blank: true, selected: @activity.contact_id},
+              {class: 'chosen-select', :data => {'placeholder'=>'Choose a Contact' , 'value' => @activity.contact.full_name }} %>
+          <% else %>
+            <%= f.collection_select "contact_id",
+              @contacts, "id", "full_name",
+              {include_blank: true, selected: @activity.contact_id},
+              {class: 'chosen-select', :data => {'placeholder' => 'Choose a Contact'}} %>
+          <% end %>
+         </div>
+      </div>
+      <div class="form-group note">
+        <div class="field">
+          <%= f.label :note %>
+          <%= f.text_area :note %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="field">
+          <%= f.hidden_field :user_id, :value => current_user.id %>
+        </div>
+      </div>
+      <div class="actions">
+        <%= f.submit %>
+        <%= link_to 'Cancel', activities_path %>
+      </div>
+    </div>
+  <% end %>
+  <ul class="link-block">
+    <li><a class="create">Create New&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+    <li><a href="/contacts/<%= @contact.id %>/activity">More&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+    <li><a href="/contacts/<%= @contact.id %>/activity?user=<%= current_user.id %>">My Activity&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+  </ul>
+</div>

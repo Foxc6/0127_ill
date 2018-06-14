@@ -1,0 +1,14 @@
+<div class="actions">
+	<%= f.submit "Save" %>
+	<%= f.submit "Save and Continue" %>
+	<% if @project.case_number.present? %>
+		<% if @project.project_state %>
+			<% if @project.project_state.present? && @project.project_state.name != 'Active' %>
+				<button class="activate-project-button"><%= link_to 'Become Project', activate_project_path(@project), method: :post, data: {confirm: 'are you sure?'} %></button>
+			<% end %>
+		<% end %>
+		<%= link_to 'Cancel', sale_path(@project.case_number) %>
+	<% else %>
+		<%= link_to 'Cancel', sales_path %>
+	<% end %>
+</div>

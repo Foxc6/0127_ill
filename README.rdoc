@@ -1,0 +1,38 @@
+Ruby Version 2.2.2
+
+
+```ruby
+  bundle exec rspec -fd # Run test suite
+
+  to ensure all test pass before pushing open  .git/hooks/pre-push.sample and add the command: echo "Running RSpec"
+  bundle exec rspec -fd
+  spec=$?
+
+
+
+  if [ $spec -eq 0 ]; then
+    echo "\\033[32mTests are green, pushing...\\033[0;39m"
+    exit 0
+  else
+    echo "\\033[1;31mCannot push, tests are failing. Use --no-verify to force push.\\033[0;39m"
+    exit 1
+  fi
+
+  Then rename the file to .git/hooks/pre-push
+```
+
+to run test before deployment
+cap staging deploy:rspec
+
+
+installing Solr Locally:
+make sure you have Java SE installed locally
+visit: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+download the file from Java SE Development Kit 8u111 that corresponds with your operating system
+open the installer and follow the prompts.
+
+
+add gem 'sunspot_solr' to the development group in gemfile
+bundle install
+run:
+bundle exec rake sunspot:solr:start

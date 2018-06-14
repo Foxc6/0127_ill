@@ -1,0 +1,26 @@
+<h1>Pinterest</h1>
+<script>
+    window.pAsyncInit = function() {
+        PDK.init({
+            appId: "4840687842220845369", // Change this
+            cookie: true
+        });
+
+         PDK.login({ scope : 'read_public' }, function(response){
+            if (!response || response.error) {
+                alert('Error occurred');
+            } else {
+                document.write(response);
+            }
+        });
+    };
+
+    (function(d, s, id){
+        var js, pjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//assets.pinterest.com/sdk/sdk.js";
+        pjs.parentNode.insertBefore(js, pjs);
+    }(document, 'script', 'pinterest-jssdk'));
+
+</script>

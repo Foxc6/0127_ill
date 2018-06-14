@@ -1,0 +1,28 @@
+<div class="table-holder">
+	<div class="has-limit extended14">
+		<% if @estimates.any? %>
+			<table>
+				<thead class="pretty">
+					<tr>
+						<th class="centered"><%= sortable "number" %></th>
+						<th class="company centered"><%= sortable "client" %></th>
+						<th class="centered"><%= sortable "total" %></th>
+						<th class="centered"><%= sortable "date" %></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @estimates.each do |estimate| %>
+						<tr class="override">
+							<td class="centered"><%= link_to( estimate.number, estimate_path(estimate) ) %></td>
+							<td class="centered"><%= estimate.client_id %></td>
+							<td class="centered"><%= number_to_currency(estimate.total) %></td>
+							<td class="centered"><%= "#{estimate.date.strftime('%x')}" %></td>
+							<td class="actions">
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
+	</div>
+</div>

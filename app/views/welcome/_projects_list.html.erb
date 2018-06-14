@@ -1,0 +1,46 @@
+<% if @active_projects.any? %>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>State</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @active_projects.each do |project| %>
+      <tr>
+        <td><%= link_to project.project_number, project_path(project) %></td>
+        <td class="avatar"><% unless project.client.blank? %>
+            <% if project.client.profile_image.url.include? 'svg' %>
+            <%= link_to( image_tag(project.client.profile_image.url(:original)), client_path(project.client) ) %>
+            <% else %>
+            <%= link_to( image_tag(project.client.profile_image.url(:thumb)), client_path(project.client) ) %>
+            <% end %>
+            <% end %>
+          <%= link_to truncate(project.name, :length => 40), project %></td>
+        <td class="state">
+          <span class="<%= project.score > 0 ? 'green' : '' %> <%= project.score < 0 ? 'red' : '' %>" >
+            <% if project.project_state.name == 'Active' %>
+            <i class="fa fa-play-circle" aria-hidden="true"></i>
+            <% elsif project.project_state.name == 'Cancelled' %>
+            <i class="fa fa-times-circle" aria-hidden="true"></i>
+            <% else %>
+            <i class="fa fa-stop-circle" aria-hidden="true"></i>
+            <% end %>
+          </span>
+        </td>
+        <td class="actions">
+          <a href="<%= project_path(project) %>"><i class="fa fa-info-circle" aria-hidden="true"></i></i></a>
+          <a href="<%= edit_project_path(project) %>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+          <a href="<%= project.url %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p>No projects yet.</p>
+<% end %>

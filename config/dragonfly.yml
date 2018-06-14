@@ -1,0 +1,22 @@
+general: &general
+  aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+
+development:
+  <<: *general
+
+test:
+  bucket_name: FAKE
+  url_host: FAKE
+  aws_access_key_id: FAKE
+  aws_secret_access_key: FAKE
+
+staging:
+  bucket_name: FAKE
+  url_host: FAKE
+  <<: *general
+
+production:
+  bucket_name: FAKE
+  url_host: FAKE
+  <<: *general

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= @title %></title>
+		<%= stylesheet_link_tag    'application', media: 'all' %>
+		<%= stylesheet_link_tag 'dhtmlxgantt', media: 'all' %>
+		<meta name="viewport" content="width=device-width, maximum-scale=1.0 , user-scalable=no">
+		<link rel="icon" type="image/vnd.microsoft.icon" href="<%= @logo %>" />
+		<%= javascript_include_tag "//fast.fonts.net/jsapi/f654e5e3-a033-44a0-82ea-7d614cdf7ecd.js" %>
+		<%= javascript_include_tag "modernizr-2.6.2.min" %>
+		<script src="https://use.fontawesome.com/404577eaf2.js"></script>
+		<%= javascript_include_tag "//maps.googleapis.com/maps/api/js?key=AIzaSyDD904igBFA5sgawvZLPadxrjwGGOUvzyg&sensor=false" %>
+		<%= javascript_include_tag 'dhtmlxgantt' %>
+		<%= csrf_meta_tags %>
+	</head>
+	<body class="<%= controller.controller_name %> <%= controller.action_name %> <%= @locale %>" data-locale="<%= @locale %>">
+		<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+		<%= render :partial => 'shared/header' %>
+		<div id="wrapper" class="container-fluid main-content">
+			<div class="row">
+				<div id="content" class="page-content col-sm-12 col-md-12">
+					<%= yield %>
+				</div>
+			</div>
+		</div>
+		<%= render :partial => 'shared/footer' %>
+		<p class="notice"><%= notice %></p>
+		<p class="alert"><%= alert %></p>
+		<script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
+		<%= javascript_include_tag 'application' %>
+	</body>
+</html>

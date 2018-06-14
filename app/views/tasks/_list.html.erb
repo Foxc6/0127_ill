@@ -1,0 +1,37 @@
+<% if @tasks.any? %>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Task</th>
+				<th>Contact</th>
+				<th>Date</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% @tasks.each do |task| %>
+		<tr class="description-toggle">
+				<td><%= link_to task.user.abbr_name, task_path(task) %></td>
+				<td><i class="fa fa-<%= task.task_type.fa_icon %>"></i>&nbsp;<%= task.task_type.name %></td>
+				<td><%= link_to task.contact.full_name, contact_path(task.contact) %></td>
+				<td><%= task.completed_at.to_time.strftime('%m/%d/%Y') %></td>
+		</tr>
+		
+		<tr class="description hidden">
+			<td colspan="5">
+				<div>
+					<% if task.description.present? %>
+						<%= raw(task.description) %>
+					<% else %>
+						<p class="empty">No description yet.</p>
+					<% end %>
+				</div>
+			</td>
+		</tr>
+		<% end %>
+		</tbody>
+	</table>
+	<%= will_paginate @tasks %>
+	<% else %>
+		<p class="empty">No tasks yet.</p>
+	<% end %>

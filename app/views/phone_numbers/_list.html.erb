@@ -1,0 +1,17 @@
+<% if @phone_numbers.present? %>
+	<% @phone_numbers.each do |phone_number| %>
+		<li class="phone_number no-border">
+			<% if phone_number.name.present?%>
+				<h4><%= phone_number.name %></h4>
+				<div class="value">
+					<p><%= number_to_phone(phone_number.number, area_code: true) %></p>
+				</div>
+			<% else %>
+				<h4>Phone</h4>
+				<div class="value">
+					<p><%= number_to_phone(phone_number.number, area_code: true) %></p>
+				</div>
+			<% end %>
+		</li>
+	<% end %>
+<% end %>

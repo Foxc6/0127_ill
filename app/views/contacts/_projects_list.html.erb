@@ -1,0 +1,20 @@
+<% if @projects.any? %>
+  <table class="project-focus">
+    <tbody>
+     	<% @projects.each do |project| %>
+			<tr>
+				<td class="avatar">
+					<% unless project.client.blank? %>
+						<%= link_to( image_tag(project.thumbnail_image.url(:thumb)), project_path(project), :class=>'p-img') %>
+						<%= link_to truncate(project.name, :length => 40), project_path(project), :class=>'p-name' %>
+					<% end %>
+				</td>
+				<td><%= link_to project.project_number, project_path(project), :class=>'p-number' %></td>
+			</tr>
+    	<% end %>
+		<%= will_paginate @projects %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty">No projects yet.</p>
+<% end %>

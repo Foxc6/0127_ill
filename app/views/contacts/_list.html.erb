@@ -1,0 +1,69 @@
+<div class="table-holder">
+	<div class="has-limit extended14">
+		<% if @contacts.any? %>
+			<table class="contacts-table">
+				<thead class="pretty">
+					<tr>
+						<th class="avatar"><%= sortable "name" %></th>
+						<th class="company centered"><%= sortable "company" %></th>
+						<th class="type centered no-mob"><%= sortable "type", "type" %></th>
+						<th class="since centered no-mob"><%= sortable "since" %></th>
+						<th class="rating centered no-mob"><%= sortable "rating" %></th>
+						<th colspan="3" class="actions"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @contacts.each do |contact| %>
+						<tr class="override">
+							<td class="avatar">
+								<div class="holder">
+									<%= image_tag(contact.profile_image.url(:thumb)) %>
+									<span class="name-title-txt">
+										<span class="name"><%= link_to contact.full_name, contact %></span>
+										<br>
+										<span class="title"><%= link_to truncate(contact.title, length: 50), contact %></span>
+									</span>
+								</div>
+							</td>
+							<td class="company centered">
+								<% if contact.company_contact.present? %>
+									<% if contact.is_client %>
+										<% if contact.profile_image.present? %>
+											<% if contact.company_contact.profile_image.url.include? 'svg' %>
+												<%= image_tag(contact.company_contact.profile_image.url(:original)) %>
+											<% else %>
+												<%= image_tag(contact.company_contact.profile_image.url(:thumb)) %>
+											<% end %>
+										<% end %>
+									<% else %>
+										<% if contact.profile_image.present? %>
+											<% if contact.company_contact.profile_image.url.include? 'svg' %>
+												<%= image_tag(contact.company_contact.profile_image.url(:original)) %>
+											<% else %>
+												<%= image_tag(contact.company_contact.profile_image.url(:medium)) %>
+											<% end %>
+										<% end %>
+									<% end %>
+								<% end %>
+							</td>
+							<td class="type centered no-mob"><%= contact.contact_type.name %></td>
+							<td class="since centered no-mob"><%= contact.created_at.strftime('%Y') %> </td>
+							<td class="rating centered no-mob">*</td>
+							<td class="actions">
+								<%= display_email_linkedin(contact) %>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
+	</div>
+</div>
+
+<div class="has-limit pagination-block">
+	<% if @contacts.any? %>
+		<%= will_paginate @contacts, :previous_label => 'Prev', :next_label => 'Next'  %>
+	<% else %>
+		<p class="empty">No contacts yet.</p>
+	<% end %>
+</div>

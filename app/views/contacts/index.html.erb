@@ -1,0 +1,34 @@
+<div class="row bar-header full-bg">
+  <div class="col-sm-12 col-md-12">
+    <div class="has-limit">
+      <% flash.each do |key, value| %>
+      <div id="error_explanation"><%= value %></div>
+      <% end %>
+      <h2>Contacts</h2>
+      <%= link_to '+ New Contact', new_contact_path %>
+    </div>
+  </div>
+</div>
+<div class="row utility-bar">
+  <div class="col-sm-12 col-md-12">
+    <div class="has-limit">
+      <ul class="utility">
+        <li>Total: <span class="<%= @total_records_clr %>"><%= @total_records %></span></li>
+        <li>Goal: <span class="green"><%= @total_records_goal %></span></li>
+        <li class="view list-view"><i class="fa fa-th-list" aria-hidden="true"></i></li>
+        <li class="view grid-view current"><i class="fa fa-th" aria-hidden="true"></i></li>
+      </ul>
+      <br>
+      <ul class="main-filter">
+        <li class="<% if !params['filter'].present? || params['filter'] == 'active' then %>current<% end %>"><a href="/contacts">Active</a></li>
+        <li class="<% if params['filter'] == 'people' then %>current<% end %>"><a href="/contacts?filter=people">People</a></li>
+        <li class="<% if params['filter'] == 'companies' then %>current<% end %>"><a href="/contacts?filter=companies">Companies</a></li>
+        <li class="<% if params['filter'] == 'team' then %>current<% end %>"><a href="/contacts?filter=team">Team</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="layout row grid">
+  <%= render :partial => 'contacts/grid', :locals => {:contacts => @contacts} %>
+  <%= render :partial => 'contacts/list', :locals => {:contacts => @contacts} %>
+</div>

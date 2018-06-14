@@ -1,0 +1,39 @@
+<div class="bar-header">
+  <h2>Task Detail</h2>
+</div>
+
+<p>
+  <strong>User</strong>
+  <%= link_to @task.user.full_name, @task.user %>
+</p>
+
+<p>
+  <strong>Type</strong>
+  <i class="fa fa-<%= @task.task_type.fa_icon %>"></i>&nbsp;<%= @task.task_type.name %>
+</p>
+
+<p>
+  <strong>Description</strong>
+  <%= raw(@task.description) %>
+</p>
+
+<p>
+  <strong>Contact</strong>
+  <%= link_to @task.contact.full_name, @task.contact %>
+</p>
+
+<p>
+  <strong>Start Date</strong>
+  <%= @task.started_at.to_time.strftime('%m/%d/%Y - %I:%M %p').downcase %>
+</p>
+
+<p>
+  <strong>End Date</strong>
+  <%= @task.completed_at.to_time.strftime('%m/%d/%Y - %I:%M %p').downcase %>
+</p>
+
+<%= link_to 'Back', tasks_path %>
+<% if current_user.id == @task.user_id %>
+  <%= link_to 'Edit', edit_task_path %>
+  <%= link_to 'Delete', @task, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>

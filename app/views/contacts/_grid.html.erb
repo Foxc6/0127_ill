@@ -1,0 +1,64 @@
+<div class="grid-list">
+  <ul class="has-limit extended30">
+    <% @contacts.each do |contact| %>
+      <li>
+        <div class="list-card">
+          <div class="avatar">
+            <%= link_to( image_tag(contact.profile_image.url(:medium)), contact ) %>
+            <p class="company_name">
+              <% if contact.company_contact.present? %>
+                <% if contact.is_client %>
+                  <% if contact.profile_image.present? %>
+                      <% if contact.company_contact.profile_image.url.include? 'svg' %>
+                        <%= link_to(image_tag(contact.company_contact.profile_image.url(:original)), client_path(contact.company_contact)) %>
+                      <% else %>
+                        <%= link_to(image_tag(contact.company_contact.profile_image.url(:medium)), client_path(contact.company_contact)) %>
+                    <% end %>
+                  <% end %>
+                <% else %>
+                  <% if contact.company_contact.profile_image.present? %>
+                    <% if contact.company_contact.profile_image.url.include? 'svg' %>
+                      <%= link_to(image_tag(contact.company_contact.profile_image.url(:original)), client_path(contact.company_contact)) %>
+                    <% else %>
+                      <%= link_to(image_tag(contact.company_contact.profile_image.url(:medium)), contact.company_contact) %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </p>
+          </div>
+          <div class="contents">
+            <span class="name-title-txt">
+              <span class="name"><%= link_to contact.full_name, contact %></span>
+              <br>
+              <span class="title"><%= link_to truncate(contact.title, length: 50), contact %></span>
+              <br>
+               <ul class="what-where-when">
+                <li>
+                  <p class="contact-type">
+                    <%= contact.contact_type.name %>
+                  </p>
+                </li>
+                <% unless contact.time_zone.blank? %>
+                <li>
+                  <p class="time-zone">
+                    <%= raw contact.time_zone.name %>
+                  </p>
+                </li>
+                <% end %>
+                <li>
+                  <p class="since">Since <%= contact.created_at.strftime('%Y') %></p>
+                </li>
+              </ul>
+              <div class="list-card-foot">
+                <div class="actions">
+                  <%= display_email_linkedin(contact) %>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

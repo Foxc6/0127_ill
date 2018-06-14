@@ -1,0 +1,26 @@
+<ul class="profile-nav">
+	<li>
+		<i class="fa fa-user" aria-hidden="true"></i>
+		<%= link_to 'My Account', '/account' %>
+	</li>
+	<li>
+		<i class="fa fa-cog" aria-hidden="true"></i>
+		<%= link_to 'Settings', '/settings' %>
+	</li>
+	<% if current_user %>
+		<% if current_user.role.name == 'admin' %>
+		<li>
+			<i class="fa fa-key" aria-hidden="true"></i>
+			<%= link_to 'Admin', '/admin' %>
+		</li>
+		<% end %>
+	<% end %>
+	<li>
+		<i class="fa fa-question-circle" aria-hidden="true"></i>
+		<%= link_to 'Help', '/help' %>
+	</li>
+	<li>
+		<i class="fa fa-sign-out" aria-hidden="true"></i>
+		<%= link_to "Sign Out", destroy_user_session_path, data: { confirm: 'Are you sure?' } %>
+	</li>
+</ul>

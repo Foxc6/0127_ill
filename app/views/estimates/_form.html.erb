@@ -1,0 +1,90 @@
+<div class="has-limit">
+	<div class="row">
+		<%= nested_form_for(@estimate) do |f| %>
+			<div class="col-sm-12 col-md-6">
+			<div class="form-group edit-pro-estimate">
+				<h2><%= action_name.capitalize %> Estimate</h2>
+			</div>
+
+				<% if @estimate.errors.any? %>
+					<div id="error_explanation">
+						<h2><%= pluralize(@estimate.errors.count, "error") %> prohibited this contact from being saved:</h2>
+						<ul>
+							<% @estimate.errors.full_messages.each do |message| %>
+								<li><%= message %></li>
+							<% end %>
+						</ul>
+					</div>
+				<% end %>
+
+			<fieldset class="client">
+                <%= f.label :client %>
+                <% unless @estimate.client_id.blank? %>
+                    <%= f.collection_select "client_id",
+                    @clients, "id", "company_name",
+                    {include_blank: true, selected: @estimate.client_id},
+                  {class: 'chosen-select', :data => {'placeholder' => 'Client', 'value' => @estimate.client.company_name} } %>
+                <% else %>
+                    <%= f.collection_select "client_id",
+                    @clients, "id", "company_name",
+                    {include_blank: true, selected: @estimate.client_id},
+                    {class: 'chosen-select', :data => {'placeholder' => 'Client'} } %>
+                <% end %>	
+			</fieldset>
+			
+			<fieldset class="client-address">
+				<% if @client.present? %>
+					<% if @client_addresses.present? %>
+			            <%= f.label :select_client_address %>
+			            <% unless @estimate.client_address_id.blank? %>
+			                <%= f.collection_select "client_address_id",
+			                @client_addresses, "id", "address_dropdown_display",
+			                {include_blank: true, selected: @estimate.client_address_id},
+			              {class: 'chosen-select', :data => {'placeholder' => 'Client Address', 'value' => @estimate.client_address_id} } %>
+			            <% else %>
+			                <%= f.collection_select "client_address_id",
+			                @client_addresses, "id", "address_dropdown_display",
+			                {include_blank: true, selected: @estimate.client_address_id},
+			              {class: 'chosen-select', :data => {'placeholder' => 'Client Address', 'value' => @estimate.client_address_id} } %>
+			            <% end %>
+			        <% end %>
+			        <%= link_to render(:partial => 'estimates/clients_address_form'), root_url %>
+			    <% end %>
+			</fieldset>
+
+			<fieldset class="project">
+	                <%= f.label :project %>
+	                <% unless @estimate.project_id.blank? %>
+	                    <%= f.collection_select "project_id",
+	                    @projects, "id", "name",
+	                    {include_blank: true, selected: @estimate.project_id},
+	                  {class: 'chosen-select', :data => {'placeholder' => 'Project', 'value' => @estimate.project_id} } %>
+	                <% else %>
+	                    <%= f.collection_select "project_id",
+	                    @projects, "id", "name",
+	                    {include_blank: true, selected: @estimate.project_id},
+	                    {class: 'chosen-select', :data => {'placeholder' => 'Project', 'value' => @estimate.project_id} } %>
+	                <% end %>
+			</fieldset>
+
+
+			<div class="bar-header">
+				<h4>Line Items</h4>
+			</div>
+			<ul id="estimate_line_items">
+			
+			<%= f.fields_for :estimate_line_items do |item| %>
+				<%= content_tag_for :li, @estimate_line_item do %>
+					<%= item.text_field :description, :class =>'odd', :placeholder => 'Description'  %>
+					<%= item.number_field :price, class: :text_field, step: :any, :placeholder => 'Price'  %>
+					<%= item.number_field :position, :class =>'odd', :placeholder => 'Position'  %>
+					<%= item.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+				<% end %>
+			<% end %>
+			</ul>
+
+			<%= f.link_to_add "+ Add Line Item", :estimate_line_items %>
+			<%= render :partial => 'estimates/actions', :locals => {:estimates => @estimates, :f => f} %>
+		<% end %>
+	</div>
+</div>

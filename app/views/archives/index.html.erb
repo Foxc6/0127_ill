@@ -1,0 +1,15 @@
+<div class="bar-header">
+  <h2>Archives Index</h2>
+</div>
+<div class="utility-bar">
+  <%= form_tag(projects_path, :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search Projects" %>
+    <%= submit_tag "Search" %>
+  <% end %>
+  <ul>
+    <li>Total: <span class="<%= @total_records_clr %>"><%= @total_records %></span></li>
+    <li>Goal: <span class="<%= @total_records_clr %>"><%= @total_records_goal %></span></li>
+    <li><%= link_to '+ Create Project', new_project_path %></li>
+  </ul>
+</div>
+<%= render :partial => 'projects/list', :locals => {:projects => @projects} %>

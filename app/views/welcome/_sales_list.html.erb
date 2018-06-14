@@ -1,0 +1,42 @@
+<% if @sales_cases.any? %>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_cases.each do |project| %>
+      <tr>
+        <td><%= link_to project.case_number, sales_case_path(project) %></td>
+        <td class="avatar"><% unless project.client.blank? %>
+            <% if project.client.is_client? %>
+              <% if project.client.profile_image.url.include? 'svg' %>
+              <%= link_to( image_tag(project.client.profile_image.url(:original)), client_path(project.client) ) %>
+              <% else %>
+              <%= link_to( image_tag(project.client.profile_image.url(:thumb)), client_path(project.client) ) %>
+              <% end %>
+            <% else %>
+              <% if project.client.profile_image.url.include? 'svg' %>
+              <%= link_to( image_tag(project.client.profile_image.url(:original)), contact_path(project.client) ) %>
+              <% else %>
+              <%= link_to( image_tag(project.client.profile_image.url(:thumb)), contact_path(project.client) ) %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <%= link_to truncate(project.name, :length => 40), sales_case_path(project) %></td>
+        <td class="actions">
+          <a href="/sales/<%= project.case_number %>"><i class="fa fa-info-circle" aria-hidden="true"></i></i></a>
+          <a href="/sales/<%= project.case_number %>/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+          <a href="<%= project.url %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p>No sales cases yet.</p>
+<% end %>

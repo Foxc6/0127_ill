@@ -1,0 +1,23 @@
+<% if @sales_cases.any? %>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>State</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_cases.each do |project| %>
+      <tr>
+        <td><%= link_to project.case_number, sale_path(project.case_number) %></td>
+        <td><%= link_to project.name, sale_path(project.case_number) %></td>
+        <td><%= link_to project.project_state.name, sale_path(project.case_number) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p class="empty">No sales cases yet.</p>
+<% end %>

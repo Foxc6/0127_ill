@@ -1,0 +1,12 @@
+id,key,
+10,quarterly_sales_goal
+11,yearly_sales_goal
+12,contact_count_goal
+13,client_count_goal
+14,project_number
+15,sales_case_number
+16,sales_case_count_goal
+17,projects_count_goal
+18,linkedin_auth_token
+19,account_manager_email
+86,sales_manager_email

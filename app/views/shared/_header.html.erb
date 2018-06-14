@@ -1,0 +1,43 @@
+<div class="container-fluid">
+	<div class="row">
+		<header class="col-sm-12 col-md-12">
+			<div class="has-limit">
+				<div class="navbar navbar-default">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/">
+							<%= image_tag('logo.svg') %>
+							<%= Preference.current.name %>
+						</a>
+					</div>
+					<% if current_user.present? %>
+						<form class="search" action="/search">
+							<input name="search" placeholder="Search">
+							<span class="magnify"><%= image_tag('magnifying-glass.png') %></span>
+							<span class="close">
+								<span class="line two"></span>
+								<span class="line three"></span>
+							</span>
+						</form>
+					<% end %>
+					<ul class="acct-link">
+						<% if current_user.present? %>
+							<li class="acct-icon"><%= image_tag(current_user.avatar.url(:medium)) %></li>
+						<% else %>
+							<li>Sign in</li>
+						<% end %>
+					</ul>
+					<% if current_user.present? %>
+						<div class="nav-toggle">
+							<span class="line one"></span>
+							<span class="line two"></span>
+							<span class="line three"></span>
+							<span class="line four"></span>
+						</div>
+						<%= render :partial => 'shared/profilenav' %>
+					<% end %>
+				</div>
+			</div>
+		</header>
+		<%= render :partial => 'shared/navigation' %>
+	</div>
+</div>

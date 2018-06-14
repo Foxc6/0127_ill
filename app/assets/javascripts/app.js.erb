@@ -1,0 +1,32 @@
+'use strict'
+var app = angular.module('app',[
+  'ui.router',
+  'templates',
+  'ngCookies',
+  'ngResource',
+  'ngSanitize'
+]);
+
+app.run(['$http',
+  '$rootScope',
+  '$location',
+  '$state',
+  function (
+  // angular services
+  $http,
+  $rootScope,
+  $location,
+  $state
+  ){
+    var authToken = "<%= ENV['AUTH_TOKEN'] %>";
+    $http.defaults.headers.get = {
+      'X-Application-Authentication-Token': authToken,
+      'X-Locale': LOCALE
+    };
+    $http.defaults.headers.post = {
+      'X-Application-Authentication-Token': authToken,
+      'X-Locale': LOCALE,
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+    }
+
+}]);

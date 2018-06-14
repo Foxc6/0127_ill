@@ -1,0 +1,9 @@
+<% if @contact_skills.present? %>
+	<% @contact_skills.each do |contact_skill| %>
+		<li class="contact_skill no-border">
+			<a href="">
+				<%= contact_skill.name %>
+			</a>
+		</li>
+	<% end %>
+<% end %>

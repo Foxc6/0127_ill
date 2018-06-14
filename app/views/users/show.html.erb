@@ -1,0 +1,26 @@
+<div class="row">
+  <% flash.each do |key, value| %>
+    <div id="error_explanation"><%= value %></div>
+  <% end %>
+  <div class="col-sm-12 col-md-6">
+    <div class="details clear">
+      <div class="bar-header">
+        <h2>User</h2>
+      </div>
+      <div class="profile-main-pts">
+        <%= image_tag(@user.avatar.url(:medium)) %>
+      <div class="profile-main-copy">
+        <h3>
+          <%= @user.full_name %>
+        </h3>
+        <p class="username">
+          <%= @user.username %>
+        </p>
+        <p class="email">
+          <%= @user.email %>
+        </p>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

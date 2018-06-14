@@ -1,0 +1,31 @@
+<div class="bar-header">
+  <h2>Activity Detail</h2>
+</div>
+<%  %>
+<p>
+  <strong>User:</strong>
+  <%= link_to @activity.user.full_name, @activity.user %>
+</p>
+
+<p>
+  <strong>Activity type:</strong>
+  <%= @activity.activity_type.name %>
+</p>
+
+<p>
+  <strong>Activity object:</strong>
+  <%= @activity_object.name %>
+</p>
+
+<p>
+  <strong>Contact:</strong>
+  <%= link_to @activity.contact.full_name, @activity.contact %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @activity.note.html_safe %>
+</p>
+
+<%= link_to 'Back', activities_path %>
+<%= link_to 'Edit', edit_activity_path(@activity) %>

@@ -1,0 +1,42 @@
+<script type="text/javascript">
+  var LOCALE = '<%= @locale %>';
+</script>
+<div class="has-limit" ng-app="app" ng-controller="appController">
+	<div class="row" style="margin-bottom: 20px;">
+		<div class="col-sm-12 col-md-6 positron-test" ng-controller="ComposeController">
+
+			<form novalidate class="positron">
+				<input type="text" class="url" placeholder="Enter URL or start typing below" ng-model="sentiment.url">
+				 <input type="submit" ng-click="updateUrl(sentiment)" value="Submit" />
+				<a class="clear" ng-click="reset()">Clear</a>
+				<a class="mail-to">Email</a>
+			</form>
+
+			<form novalidate class="positron">
+				<textarea class="can-be-cleared message" ng-model="sentiment.text"></textarea>
+				 <input type="submit" ng-click="updateText(sentiment)" value="Submit" />
+				<a class="clear" ng-click="reset()">Clear</a>
+			</form>
+
+
+			<div class="response">
+				{{data}}
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<!--
+Form 1:
+Text field: Enter URL or start typing below
+Submit button
+Form 1 calls the getURLSentiment API route
+
+Form 2
+Text Area: No placeholder
+Submit button
+Form 2 calls the getTextSentiment API route
+
+print response as JSON string in the div id="response" of the page -->

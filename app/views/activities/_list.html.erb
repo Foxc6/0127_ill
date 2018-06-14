@@ -1,0 +1,29 @@
+<% if @activities.any? %>
+<table>
+	<tbody>
+		<% @activities.each do |activity| %>
+		<tr class="description-toggle">
+			<td><%= link_to activity.user.abbr_name, activity_path(activity) %></td>
+			<td><%= activity.user.locale.market_name %></td>
+			<td><i class="fa fa-<%= activity.activity_type.fa_icon %>"></i>&nbsp;<%= activity.activity_type.name %></td>
+			<td><%= link_to activity.contact.full_name, contact_path(activity.contact) %></td>
+			<td><%= activity.created_at.to_time.strftime('%m/%d/%Y ') %></td>
+		</tr>
+		<tr class="description hidden">
+			<td colspan="5">
+				<div>
+					<% if activity.note.present? %>
+					<%= raw(activity.note) %>
+					<% else %>
+					<p>No notes yet.</p>
+					<% end %>
+				</div>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<%= will_paginate @activities %>
+<% else %>
+	<p class="not-found">No activities yet.</p>
+<% end %>

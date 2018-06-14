@@ -1,0 +1,4 @@
+<div class="bar-header">
+  <h2>Tasks: <%= @contact.full_name %></h2>
+</div>
+<%= render :partial => 'tasks/list', :locals => {:tasks => @tasks} %>

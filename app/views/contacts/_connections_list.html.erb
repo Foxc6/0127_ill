@@ -1,0 +1,28 @@
+<% if @connections.any? %>
+<table class="team">
+  <tbody>
+    <% @connections.each do |connection| %>
+      <% contact = Contact.find(connection.connectie_id) %>
+      <tr>
+        <td class="avatar">
+          <% if contact.profile_image.url.include? 'svg' %>
+          <%= link_to image_tag(contact.profile_image.url(:original)), contact %>
+          <% else %>
+          <%= link_to image_tag(contact.profile_image.url(:thumb)), contact %>
+          <% end %>
+          <%= link_to contact.full_name, contact %>
+        </td>
+        <td><%= connection.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p class="empty">No connections yet.</p>
+<% end %>
+
+
+<!-- should show up in project contacts
+referral
+sales
+primary -->

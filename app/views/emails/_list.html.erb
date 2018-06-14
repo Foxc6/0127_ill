@@ -1,0 +1,20 @@
+<li class="no-border">
+	<h4>Email</h4>
+	<div class="value">
+		<p><a href="mailto:<%= @contact.email %>"><%= @contact.email %></a></p>
+	</div>
+</li>
+<% if @contact.emails.any?%>
+	<% @contact.emails.each do |email| %>
+		<li class="no-border">
+		  <% if email.name.present? %>
+		    <h4><%= email.name %></h4>
+		  <% else %>
+		  	<h4>Email</h4>
+		  <% end %>
+			<div class="value">
+		    	<p><a href="mailto:<%= email.email %>"><%= email.email %></a></p>
+		    </div>
+		</li>
+	<% end %>
+<% end %>

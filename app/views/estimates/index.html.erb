@@ -1,0 +1,15 @@
+<div class="row bar-header full-bg">
+  <div class="col-sm-12 col-md-12">
+    <div class="has-limit">
+      <% flash.each do |key, value| %>
+      <div id="error_explanation"><%= value %></div>
+      <% end %>
+      <h2>Estimates</h2>
+      <%= link_to '+ New Estimate', new_estimate_path %>
+    </div>
+  </div>
+</div>
+
+<div class="layout row">
+  <%= render :partial => 'estimates/list', :locals => {:estimates => @estimates} %>
+</div>

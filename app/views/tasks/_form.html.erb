@@ -1,0 +1,100 @@
+<div class="hidden-form">
+  <%= form_for(@task) do |f| %>
+    <% if @task.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+        <ul>
+        <% @task.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="new-edit">
+      <div class="form-group contact">
+        <div class="field">
+        <% unless @task.contact.blank? %>
+          <%= f.label :contact %>
+          <%= f.collection_select "contact_id",
+            Contact.all, :id, :full_name,
+            {include_blank: true, selected: @task.contact_id},
+            { class: 'chosen-select', :data => {'placeholder' => 'Choose a Contact', 'value' => @task.contact.full_name}} %>
+        <% else %>
+          <%= f.label :contact %>
+          <%= f.collection_select "contact_id",
+            Contact.all, :id, :full_name,
+            {include_blank: true, selected: @contacts},
+            { class: 'chosen-select', :data => {'placeholder' => 'Choose a Contact'}} %>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group task">
+        <div class="field">
+          <% unless @task.task_type.blank? %>
+          <%= f.label :task_type %>
+          <%= f.collection_select "task_type_id",
+            TaskType.all, :id, :name,
+            {include_blank: true, selected: @task.task_type_id},
+            { class: 'chosen-select', :data => {'placeholder' => 'TaskType', 'value' => @task.task_type.name}} %>
+        <% else %>
+          <%= f.label :task_type %>
+          <%= f.collection_select "task_type_id",
+            TaskType.all, :id, :name,
+            {include_blank: true, selected: @task.task_type_id},
+            { class: 'chosen-select', :data => {'placeholder' => 'TaskType'}} %>
+        <% end %>
+        </div>
+      </div>
+      <div class="form-group completed-at">
+        <div class="field">
+          <%= f.hidden_field :user_id, :value => current_user.id %>
+        </div>
+         <div class="field">
+          <%= f.label :start_date %>
+          <div class='input-group date' class='datepicker'>
+            <% unless @task.started_at.blank? %>
+            <input type="text" id="task-date-picker" name="task-date-picker" class="date-picker" value="<%= @task.started_at.strftime('%m/%d/%Y') %>" autocomplete="off" data-proxy="started_at" required/>
+            <% else %>
+             <input type="text" id="task-start-date-picker" name="task-date-picker" class="date-picker" autocomplete="off" data-proxy="started_at" required />
+            <% end %>
+            <span class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </span>
+            <%= f.hidden_field :started_at, :value => @task.started_at, :id => "started_at" %>
+          </div>
+        </div>
+        <div class="field">
+          <%= f.label :end_date %>
+          <div class='input-group date' class='datepicker'>
+            <% unless @task.completed_at.blank? %>
+            <input type="text" id="task-date-picker" name="task-date-picker" class="date-picker" value="<%= @task.completed_at.strftime('%m/%d/%Y') %>" autocomplete="off" data-proxy="completed_at"/>
+            <% else %>
+             <input type="text" id="task-date-picker" name="task-date-picker" class="date-picker"  autocomplete="off" data-proxy="completed_at"/>
+            <% end %>
+            <span class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </span>
+            <%= f.hidden_field :completed_at, :value => @task.completed_at, :id => "completed_at" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="field">
+          <%= f.label :description %><br>
+          <%= f.text_area :description %>
+        </div>
+      </div>
+      <div class="actions">
+        <%= f.submit %>
+        <%= link_to 'Cancel', tasks_path %>
+      </div>
+    </div>
+  <% end %>
+  <ul class="link-block">
+    <li><a class="create">Create New&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+    <li><a href="/contacts/<%= @contact.id %>/tasks">More&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+    <li><a href="/contacts/<%= @contact.id %>/tasks?user=<%= current_user.id %>">My Tasks&nbsp;<i class="fa fa-arrow-circle-right"></i></a></li>
+  </ul>
+</div>

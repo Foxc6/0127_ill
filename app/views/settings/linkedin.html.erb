@@ -1,0 +1,6 @@
+<% if session[:auth_token].nil? %>
+  <button><%= link_to 'Connect to LinkedIn', auth_path %></button>
+<% else %>
+  <button><%= link_to 'Create LinkedIn Contact', auth_settings_social_networks_linkedin_path %></button>
+<% end %>
+

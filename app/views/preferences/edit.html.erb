@@ -1,0 +1,64 @@
+<div class="has-limit">
+  <div class="row">
+    <%= form_for @preference, :method => :POST do |f| %>
+      <% if @preference.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@preference.errors.count, "error") %> prohibited this preference from being saved:</h2>
+          <ul>
+          <% @preference.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+        <% end %>
+    <div class="new-edit">
+      <div class="form-group type">
+        <fieldset>
+          <%= f.label :name %>
+          <%= f.text_field :name %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :default %>
+          <%= f.check_box :default %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :company %>
+          <%= f.text_field :company %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :url %>
+          <%= f.text_field :url %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :seo_title %>
+          <%= f.text_field :seo_title %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :mail_from_address %>
+          <%= f.text_field :mail_from_address %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :logo %>
+          <%= f.file_field :logo %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :default_country_code %>
+          <%= f.collection_select "default_country_code",
+              Country.all, "id", "name",
+              {include_blank: true, selected: @preference.default_country_code},
+              { class: 'chosen-select', :data => {'placeholder' => 'Country Code', 'value' => @preference.default_country_code}} %>
+        </fieldset>
+        <fieldset>
+          <%= f.label :domestic %>
+          <%= f.check_box :is_domestic %>
+        </fieldset>
+      </div>
+    </div>
+    <div class="actions">
+      <%= f.submit "Save" %>
+      <%= f.submit "Save and Continue" %>
+    </div>
+    <% end %>
+  </div>
+</div>
+

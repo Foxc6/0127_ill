@@ -1,0 +1,14 @@
+<div class="actions">
+    <%= f.submit "Save" %>
+    <%= f.submit "Save and Continue" %>
+    <% if @project %>
+      <% if @project.project_state %>
+        <% if @project.project_state.present? && @project.project_state.name != 'Sales' %>
+          <button class="archive-button"><%= link_to 'Archive Project', archive_project_path(@project.project_number), method: :post, data: {confirm: 'are you sure?'} %></button>
+        <% end %>
+      <% end %>
+      <%= link_to 'Cancel', projects_path(@project) %>
+    <% else %>
+      <%= link_to 'Cancel', projects_path(@project) %>
+    <% end %>
+</div>

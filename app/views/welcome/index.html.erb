@@ -1,0 +1,43 @@
+<div class="has-limit">
+	<div class="row">
+		<div class="sales-cases col-sm-12 col-md-6">
+			<h2>Sales</h2><br>
+			<%= render :partial => 'statistics_list', :locals => {:projects => @projects} %>
+		</div>
+		<div class="sales-cases col-sm-12 col-md-6">
+			<%= pie_chart [["Sales", @year_received_total], ["Target", @sales_target]] %>
+		</div>
+	</div>
+	<div class="row">
+		<div id="gantt" style='width:100%; height:500px;' class="sales-cases col-sm-12 col-md-6">
+		<h2>Project Timeline</h2>
+		</div>
+	</div>
+</div>
+<script>
+	gantt.config.xml_date="%Y-%m-%d %H:%i";
+	gantt.config.columns = [
+    {name:"text", label:"Project",  width:"120", tree:true, align: "center"  }
+];
+	gantt.config.readonly = true
+	gantt.config.scale_unit = "year";
+	gantt.config.date_scale = "%y";
+	gantt.config.subscales = [
+		{unit:"month", step:1, date:"%M" }
+	];
+	gantt.config.scale_height = 100;
+	gantt.templates.date_scale = null;
+	gantt.init("gantt");
+	gantt.load("<%= data_path %>");
+	gantt.attachEvent("onTaskClick", function(id, e) {
+		var number = this.getTask(id).text
+		window.location.href="/projects/"+number;
+	});
+	gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e){
+    return false;
+	});
+
+	var dp = new dataProcessor("<%= data_path %>");
+	dp.init(gantt);
+	dp.setTransactionMode("REST");
+</script>

@@ -1,0 +1,2 @@
+id,first_name,last_name,username,email,password,password_confirmation,locale_id,role_id
+1,Shea,Gonyo,admin,admin@illcreative.com,test1234,test1234,1,1

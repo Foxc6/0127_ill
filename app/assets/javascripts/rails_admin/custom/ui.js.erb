@@ -1,0 +1,55 @@
+//= require jquery
+//= require jquery_ujs
+//= require 'tinymce-jquery'
+//= require 'rails_admin/custom/tinymce'
+$('head').append('<meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">');
+var isNavOpen = false;
+var winW;
+var winH;
+$(function() {
+    $('.sidebar-nav .nav .dropdown-header').click(function(){
+
+      if(isNavOpen) {
+        isNavOpen = false;
+        $('.sidebar-nav .nav li').stop().hide();
+        $('.dropdown-header').show();
+      } else {
+        isNavOpen = true;
+        $('.sidebar-nav .nav li').fadeIn();
+      }
+
+    });
+    $('.checkbox').closest('.controls').parent().addClass('cb-holder');
+});
+
+function resizeUI() {
+  winW = $(window).width();
+  winH = $(window).height();
+
+  if(winW>768){
+      isNavOpen = false;
+      $('.sidebar-nav .nav li').stop().show();
+      $('.dropdown-header').hide();
+  } else {
+
+       if(!isNavOpen) {
+          $('.sidebar-nav .nav li').stop().hide();
+          $('.dropdown-header').show();
+       }
+  }
+}
+
+
+
+$(window).on('resize load', resizeUI );
+
+$(document).ready(function(){
+
+  $('#edit_page > div > div > span').prepend('<button class="btn btn-info" id="preview" name="_preview" type="button">Preview</button>');
+
+  $('#preview').on('click', function(){
+  var slug = $( "#page_seo_url" ).val();
+  var url = window.location.origin;
+  window.open(url+'/pages/'+slug+'?preview=true');
+  });
+});

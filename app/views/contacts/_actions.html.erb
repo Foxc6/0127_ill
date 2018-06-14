@@ -1,0 +1,14 @@
+<div class="actions">
+  <%= f.submit "Save" %>
+  <%= f.submit "Save and Continue" %>
+  <% if @contact.contact_type %>
+    <% if @contact.contact_type.name == 'Company' %>
+      <button class="client-button"><%= link_to 'Become Client', "/contacts/#{@contact.id}/become_client", method: :post, data: {confirm: 'are you sure?'} %></button>
+    <% end %>
+  <% end %>
+  <% if @contact %>
+    <%= link_to 'Cancel', @contact %>
+    <% else %>
+    <%= link_to 'Cancel', contacts_path %>
+  <% end %>
+</div>

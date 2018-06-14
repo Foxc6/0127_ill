@@ -1,0 +1,268 @@
+<div class="has-limit">
+	<div class="row">
+		<%= nested_form_for(@contact) do |f| %>
+			<div class="bar-header col-sm-12 col-md-12">
+				<h2><%= action_name.capitalize %> Contact</h2>
+			</div>
+
+			<div class="col-sm-12 col-md-6">
+				<% if @contact.errors.any? %>
+					<div id="error_explanation">
+						<h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+						<ul>
+							<% @contact.errors.full_messages.each do |message| %>
+								<li><%= message %></li>
+							<% end %>
+						</ul>
+					</div>
+				<% end %>
+
+				<div class="edit-pro-info">
+					<div class="form-group edit-pro-img">
+						<% if @contact.profile_image.present? %>
+							<%= image_tag(@contact.profile_image.url(:medium)) %>
+						<% else %>
+							<%= image_tag("/images/medium/missing.png") %>
+						<% end %>
+						<%= f.file_field :profile_image, class: 'form-control'%>
+						<a class="img-upload-btn">Upload</a>
+					</div>
+
+					<div class="form-group edit-pro-contact">
+						<fieldset class="first-name non_copmany_field" >
+							<%= f.label :first_name %>
+							<%= f.text_field :first_name %>
+						</fieldset>
+						<fieldset class="last-name non_copmany_field">
+							<%= f.label :last_name %>
+							<%= f.text_field :last_name %>
+						</fieldset>
+						<fieldset class="title non_copmany_field">
+							<%= f.label :title %>
+							<%= f.text_field :title %>
+						</fieldset>
+						<fieldset>
+							<%= f.label :primary_email %>
+							<%= f.text_field :email %>
+						</fieldset>
+						<fieldset id="company_name">
+							<%= f.label :company_name %>
+							<%= f.text_field :company_name %>
+						</fieldset>
+						<fieldset class="company_contact non_copmany_field">
+							<% unless @contact.company_contact.blank? %>
+								<%= f.label :company %>
+								<%= f.collection_select "company_contact_id",
+								@companies, "id", "full_name",
+								{include_blank: true, selected: @contact.company_contact_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Company', 'value' => @contact.company_contact.company_name}} %>
+							<% else %>
+								<%= f.label :company %>
+								<%= f.collection_select "company_contact_id",
+								@companies, "id", "full_name",
+								{include_blank: true, selected: @contact.company_contact_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Company'}} %>
+							<% end %>
+						</fieldset>
+						<fieldset class="website_url">
+							<%= f.label :website_url %>
+							<%= f.text_field :website_url %>
+						</fieldset>
+						<fieldset class="form-group contact">
+							<% unless @contact.contact_type.blank? %>
+								<%= f.label :contact_type %>
+								<%= f.collection_select "contact_type_id",
+								@contact_types, "id", "name",
+								{include_blank: true, selected: @contact.contact_type_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Contact Type', 'value' => @contact.contact_type.name}} %>
+							<% else %>
+								<%= f.label :contact_type %>
+								<%= f.collection_select "contact_type_id",
+								@contact_types, "id", "name",
+								{include_blank: true, selected: @contact.contact_type_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Contact Type'}} %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="contact">
+							<% unless @contact.time_zone.blank? %>
+								<%= f.label :time_zone %>
+								<%= f.collection_select "time_zone_id",
+								TimeZone.all, "id", "name",
+								{include_blank: true, selected: @contact.time_zone_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Time Zone', 'value' => raw(@contact.time_zone.name)}} %>
+							<% else %>
+								<%= f.label :time_zone %>
+								<%= f.collection_select "time_zone_id",
+								TimeZone.all, "id", "name",
+								{include_blank: true, selected: @contact.time_zone_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Time Zone'}} %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="contact">
+							<% unless @contact.directional_motivation.blank? %>
+								<%= f.label :directional_motivation %>
+								<%= f.collection_select "directional_motivation_id",
+								DirectionalMotivation.all, "id", "name",
+								{include_blank: true, selected: @contact.directional_motivation_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Directional Motivation', 'value' => @contact.directional_motivation.name }} %>
+							<% else %>
+								<%= f.label :directional_motivation %>
+								<%= f.collection_select "directional_motivation_id",
+								DirectionalMotivation.all, "id", "name",
+								{include_blank: true, selected: @contact.directional_motivation_id},
+								{ class: 'chosen-select', :data => {'placeholder' => 'Directional Motivation' }} %>
+							<% end %>
+						</fieldset>
+
+						<fieldset class="contact">
+							<% unless @contact.self_expression_type.blank? %>
+								<%= f.label :self_expression_type %>
+								<%= f.collection_select "self_expression_type_id",
+								SelfExpressionType.all, "id", "name",
+								{include_blank: true, selected: @contact.self_expression_type_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Self Expression Type', 'value' => @contact.self_expression_type.name}} %>
+							<% else %>
+								<%= f.label :self_expression_type %>
+								<%= f.collection_select "self_expression_type_id",
+								SelfExpressionType.all, "id", "name",
+								{include_blank: true, selected: @contact.self_expression_type_id},
+								{class: 'chosen-select', :data => {'placeholder' => 'Self Expression Type'}} %>
+							<% end %>
+						</fieldset>
+					</div>
+				</div>
+
+				<br>
+				<div>
+					<%= f.label :about %><br>
+					<%= f.text_area :about, :class => "tinymce" %>
+				</div>
+
+				<br>
+				<div class="form-group non_copmany_field">
+					<%= f.label :agenda %><br>
+					<%= f.text_area :agenda %>
+				</div>
+
+				<br>
+				<div class="form-group non_copmany_field">
+					<%= f.label :wants_general %><br>
+					<%= f.text_area :wants_general %>
+				</div>
+
+				<br>
+				<div class="form-group non_copmany_field">
+					<%= f.label :wants_specifically %><br>
+					<%= f.text_area :wants_specifically %>
+				</div>
+
+				<br>
+				<div class="form-group non_copmany_field">
+					<%= f.label :values %><br>
+					<%= f.text_area :values %>
+				</div>
+				<%= render :partial => 'contacts/actions', :locals => {:contacts => @contacts, :f => f} %>
+			</div>
+
+			<div class="col-sm-12 col-md-6">
+				<div class="form-group edit-group emails">
+					<div class="bar-header">
+						<h4>Emails</h4>
+					</div>
+
+					<%= f.fields_for :emails do |email| %>
+						<%= email.text_field  :name, :class =>'odd', :placeholder => 'Name'  %>
+						<%= email.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+						<%= email.text_field  :email, :placeholder => 'Email'  %>
+					<% end %>
+					<%= f.link_to_add "+ Add Email", :emails %>
+				</div>
+
+				<div class="form-group edit-group phone-numbers">
+					<div class="bar-header">
+						<h4>Phone Numbers</h4>
+					</div>
+					<%= f.fields_for :phone_numbers do |phone_number| %>
+						<%= phone_number.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+						<%= phone_number.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+						<%= phone_number.text_field  :number, :placeholder => 'Number'  %>
+					<% end %>
+					<%= f.link_to_add " + Add Phone Number", :phone_numbers %>
+				</div>
+
+				<div class="form-group edit-group urls">
+					<div class="bar-header">
+						<h4>URLs</h4>
+					</div>
+					<%= f.fields_for :website_urls do |website_url| %>
+						<%= website_url.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+						<%= website_url.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+						<%= website_url.text_field  :url, :placeholder => 'URL'  %>
+					<% end %>
+					<%= f.link_to_add " + Add URL", :website_urls %>
+				</div>
+
+					<div class="form-group edit-group connections">
+						<div class="bar-header">
+							<h4>Connections</h4>
+						</div>
+						<%= f.fields_for :user_connections do |connection| %>
+							<%= connection.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+							<% unless connection.blank? %>
+							<% connectie = UserConnection.where(connectie_id: connection.object.connectie_id).first %>
+							<% unless connectie.blank? %>
+							<%= connection.link_to_remove raw('<i class="fa fa-times-circle"></i>')%>
+								<%= connection.select "connectie_id", options_from_collection_for_select(@contacts, "id", "full_name", connectie.connectie.id), {include_blank: true, selected: connectie.connectie.id, class: 'chosen-select'} %>
+							<% else %>
+								<%= connection.select "connectie_id", options_from_collection_for_select(@contacts, "id", "full_name"), include_blank: true %>
+							<% end %>
+						<% end %>
+						<% end %>
+						<%= f.link_to_add " + Add Connection", :user_connections %>
+					</div>
+
+				<div class="form-group edit-group addresses half">
+					<div class="bar-header">
+						<h4>Addresses</h4>
+					</div>
+					<%= f.fields_for :addresses do |address| %>
+						<%= address.text_field :name, :class =>'odd', :placeholder => 'Name' %>
+						<%= address.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+						<br>
+						<%= address.text_field  :address1, :class =>'odd', :placeholder => 'Address 1'  %>
+						<%= address.text_field  :address2, :placeholder => 'Address 2'  %>
+						<%= address.text_field  :city, :class =>'odd', :placeholder => 'City'  %>
+						<% unless address.blank? %>
+							<% state = State.where(id: address.object.state_id).first %>
+							<% unless state.blank? %>
+								<%= address.select( "state_id", options_from_collection_for_select(@states, "id", "name", state.id), include_blank: true) %>
+							<% else %>
+								<%= address.select( "state_id", options_from_collection_for_select(@states, "id", "name"), include_blank: true) %>
+							<% end %>
+						<% end %>
+						<%= address.text_field  :postal_code, :class =>'odd', :placeholder => 'Postal Code'  %>
+						<%= address.hidden_field  :country_id, :value => @default_country  %>
+					<% end %>
+					<%= f.link_to_add " + Add Address", :addresses %>
+				</div>
+
+				<div class="form-group edit-group-social social-reaches half">
+					<div class="bar-header">
+						<h4>Social Networks</h4>
+					</div>
+					<%= f.fields_for :social_reaches do |social_reach| %>
+						<%= social_reach.select( "social_network_id", options_from_collection_for_select(@social_networks, "id", "name", social_reach.object.social_network_id), include_blank: true)  %>
+						<%= social_reach.link_to_remove raw('<i class="fa fa-times-circle"></i>') %>
+						<br>
+						<%= social_reach.text_field :username, :class =>'odd', :placeholder => 'Username' %>
+						<%= social_reach.text_field  :total_reach, :placeholder => 'Total Reach'  %>
+					<% end %>
+					<%= f.link_to_add " + Add Social Network", :social_reaches %>
+				</div>
+				<%= render :partial => 'contacts/actions', :locals => {:contacts => @contacts, :f => f} %>
+			</div>
+		<% end %>
+	</div>
+</div>

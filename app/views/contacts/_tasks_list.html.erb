@@ -1,0 +1,38 @@
+<% if @tasks.any? %>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Locale</th>
+				<th>Task</th>
+				<th>Contact</th>
+				<th>Date</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% @tasks.each do |task| %>
+		<tr class="description-toggle">
+				<td><%= task.user.abbr_name %></td>
+				<td><%= task.user.locale.market_name %></td>
+				<td><i class="fa fa-<%= task.task_type.fa_icon %>"></i>&nbsp;<%= task.task_type.name %></td>
+				<td><%= task.contact.full_name %></td>
+				<td><%= task.completed_at.to_time.strftime('%m/%d/%Y') %></td>
+		</tr>
+		
+		<tr class="description hidden wysiwyg">
+			<td colspan="5">
+				<div>
+					<% if task.description.present? %>
+					<%= raw(task.description) %>
+					<% else %>
+					<p>No description yet.</p>
+					<% end %>
+				</div>
+			</td>
+		</tr>
+		<% end %>
+		</tbody>
+	</table>
+	<% else %>
+		<p class="empty">No tasks yet.</p>
+	<% end %>

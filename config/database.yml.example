@@ -1,0 +1,22 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: 0127_ILL
+  pool: 5
+  username: root
+  password: root
+  host: localhost
+  socket: /Applications/MAMP/tmp/mysql/mysql.sock
+
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: 0127_ILL_TEST
+  pool: 5
+  username: root
+  password: root
+  host: localhost
+  socket: /Applications/MAMP/tmp/mysql/mysql.sock

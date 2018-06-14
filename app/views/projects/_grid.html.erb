@@ -1,0 +1,42 @@
+<div class="grid-list">
+  <ul class="has-limit extended30">
+    <% @projects.each do |project| %>
+      <li>
+        <div class="list-card">
+          <%= link_to( image_tag(project.thumbnail_image.url(:medium)), project_path(project) ) %>
+          <div class="contents">
+            <span class="name-title-txt">
+              <span class="name"><%= link_to truncate(project.name, :length => 90), project %></span>
+              <br>
+              <span class="title"><%= link_to project.project_number, project_path(project) %></span>
+              <br>
+              <div class="state centered">
+                <span class="<%= project.score > 0 ? 'green' : '' %> <%= project.score < 0 ? 'red' : '' %>" >
+                  <% if project.project_state.name == 'Active' %>
+                  <i class="fa fa-play-circle" aria-hidden="true"></i>
+                  <% elsif project.project_state.name == 'Cancelled' %>
+                  <i class="fa fa-times-circle" aria-hidden="true"></i>
+                  <% else %>
+                  <i class="fa fa-stop-circle" aria-hidden="true"></i>
+                  <% end %>
+                </span>
+              </div>
+              <div class="list-card-foot">
+                <div class="actions">
+                  <a href="<%= project.url %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                </div>
+                <p class="company_name">
+                  <% if project.client.profile_image.url.include? 'svg' %>
+                    <%= link_to( image_tag(project.client.profile_image.url(:original)), client_path(project.client) ) %>
+                  <% else %>
+                    <%= link_to( image_tag(project.client.profile_image.url(:thumb)), client_path(project.client) ) %>
+                  <% end %>
+                </p>
+              </div>
+            </span>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

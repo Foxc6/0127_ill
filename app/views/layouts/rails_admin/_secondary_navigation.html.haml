@@ -1,0 +1,6 @@
+%ul.nav.navbar-nav.navbar-right.root_links
+  - if main_app_root_path = (main_app.root_path rescue false)
+    %li= link_to t('admin.home.name'), main_app_root_path
+  - if current_user
+    %li= link_to current_user.email, rails_admin.edit_path(model_name: 'user', id: current_user.id)
+  %li.log-out-btn= link_to content_tag('span', t('user.misc.log_out'), class: 'label label-danger'), '/users/sign_out', method: logout_method

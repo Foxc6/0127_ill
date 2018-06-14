@@ -1,0 +1,37 @@
+<div class="grid-list">
+  <ul class="has-limit extended30">
+    <% @projects.each do |project| %>
+      <li>
+        <div class="list-card">
+          <% if project.client.is_client? %>
+            <% if project.client.profile_image.url.include? 'svg' %>
+              <%= link_to( image_tag(project.client.profile_image.url(:original)), client_path(project.client) ) %>
+            <% else %>
+              <%= link_to( image_tag(project.client.profile_image.url(:medium)), client_path(project.client) ) %>
+            <% end %>
+          <% else %>
+            <% if project.client.profile_image.url.include? 'svg' %>
+              <%= link_to( image_tag(project.client.profile_image.url(:original)), contact_path(project.client) ) %>
+            <% else %>
+              <%= link_to( image_tag(project.client.profile_image.url(:medium)), contact_path(project.client) ) %>
+            <% end %>
+          <% end %>
+          <div class="contents">
+            <span class="name-title-txt">
+              <span class="name"><%= link_to truncate(project.name, :length => 90), sales_case_path(project) %></span>
+              <br>
+              <span class="title"><%= link_to project.case_number, sales_case_path(project) %></span>
+              <br>
+              <span class="status">*</span>
+              <div class="list-card-foot">
+                <div class="actions">
+                  <a href="<%= project.url %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>
